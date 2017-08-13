@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="bpmnet"
+    targetNamespace="http://www.bpmnet.org/bpmn/schema/v1"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    xmlns="http://www.bpmnet.org/bpmn/schema/v1/bpmnet.xsd"
+    xmlns:mstns="http://www.bpmnet.org/bpmn/schema/v1/bpmnet.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+</xs:schema>

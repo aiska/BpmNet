@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions
+	xmlns:p="http://www.bpmnet.org/bpmn/properties/v1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.activiti.org/test"
+	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <itemDefinition id="de" structureRef="p:dataEntryObject1" />
+  <itemDefinition id="fullName" structureRef="xsd:string" />
+  <process id="losFlow" name="losFlow" isExecutable="true">
+    <ioSpecification id="InputOutputSpec">
+      <dataInput id="InputAppId" name="Input Application Id" />
+      <dataOutput  id="OutputAppId" name="Output Application Id" />
+    </ioSpecification>
+    <startEvent id="startevent1" name="Start" />
+    <userTask id="IDE" activiti:candidateGroups="ROLE_IDE" name="Initial Data Entry" xmlns:activiti="http://activiti.org/bpmn" />
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="IDE" />
+    <userTask id="IDE_CHECKER" activiti:candidateGroups="ROLE_IDE_CHECKER" name="IDE Checker" xmlns:activiti="http://activiti.org/bpmn" />
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway" />
+    <sequenceFlow id="flow3" sourceRef="IDE_CHECKER" targetRef="exclusivegateway1" />
+    <sequenceFlow id="flow4" name="SENDBACK" sourceRef="exclusivegateway1" targetRef="IDE">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("SENDBACK")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow5" name="COMPLETE" sourceRef="exclusivegateway1" targetRef="parallelgateway1">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("COMPLETE")}</conditionExpression>
+    </sequenceFlow>
+    <parallelGateway id="parallelgateway1" name="Exclusive Gateway" />
+    <sequenceFlow id="flow6" sourceRef="parallelgateway1" targetRef="MCP_SERVICE" />
+    <serviceTask id="DEDUP_SERVICE" activiti:class="com.pefindo.los.servicetask.DedupService" name="DEDUP" xmlns:activiti="http://activiti.org/bpmn" />
+    <sequenceFlow id="flow7" sourceRef="parallelgateway1" targetRef="DEDUP_SERVICE" />
+    <serviceTask id="BLACKLIST_SERVICE" activiti:class="com.pefindo.los.servicetask.BlacklistService" name="BlackList" xmlns:activiti="http://activiti.org/bpmn" />
+    <sequenceFlow id="flow8" sourceRef="parallelgateway1" targetRef="BLACKLIST_SERVICE" />
+    <serviceTask id="BICHECK_SERVICE" activiti:class="com.pefindo.los.servicetask.BICheckingService" name="BI Checking" xmlns:activiti="http://activiti.org/bpmn" />
+    <sequenceFlow id="flow9" sourceRef="parallelgateway1" targetRef="BICHECK_SERVICE" />
+    <sequenceFlow id="flow11" sourceRef="DEDUP_SERVICE" targetRef="parallelgateway2" />
+    <sequenceFlow id="flow12" sourceRef="BLACKLIST_SERVICE" targetRef="parallelgateway2" />
+    <sequenceFlow id="flow13" sourceRef="BICHECK_SERVICE" targetRef="parallelgateway2" />
+    <userTask id="FDE" activiti:candidateGroups="ROLE_FDE" name="Full Data Entry" xmlns:activiti="http://activiti.org/bpmn" />
+    <userTask id="FDE_CHECKER" activiti:candidateGroups="ROLE_FDE_CHECKER" name="Full Data Entry Checker" xmlns:activiti="http://activiti.org/bpmn" />
+    <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway" />
+    <sequenceFlow id="flow16" sourceRef="FDE_CHECKER" targetRef="exclusivegateway2" />
+    <sequenceFlow id="flow17" name="SENDBACK" sourceRef="exclusivegateway2" targetRef="FDE">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("SENDBACK")}</conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway" />
+    <sequenceFlow id="flow18" sourceRef="IDE" targetRef="exclusivegateway3" />
+    <sequenceFlow id="flow19" name="COMPLETE" sourceRef="exclusivegateway3" targetRef="IDE_CHECKER">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("COMPLETE")}</conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent2" name="End" />
+    <exclusiveGateway id="exclusivegateway4" name="Exclusive Gateway" />
+    <sequenceFlow id="flow21" name="REJECT" sourceRef="exclusivegateway3" targetRef="exclusivegateway4">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("REJECT")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow22" sourceRef="exclusivegateway4" targetRef="endevent2" />
+    <sequenceFlow id="flow23" name="REJECT" sourceRef="exclusivegateway1" targetRef="exclusivegateway4">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("REJECT")}</conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway5" name="Exclusive Gateway" />
+    <sequenceFlow id="flow25" sourceRef="FDE" targetRef="exclusivegateway5" />
+    <sequenceFlow id="flow26" name="SENDBACK" sourceRef="exclusivegateway5" targetRef="PRESCREEN">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("SENDBACK")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow27" name="COMPLETE" sourceRef="exclusivegateway5" targetRef="FDE_CHECKER">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("COMPLETE")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow28" name="REJECT" sourceRef="exclusivegateway5" targetRef="exclusivegateway4">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("REJECT")}</conditionExpression>
+    </sequenceFlow>
+    <userTask id="MPK" activiti:candidateGroups="ROLE_MPK" name="Memo Persetujuan Kredit" xmlns:activiti="http://activiti.org/bpmn" />
+    <sequenceFlow id="flow29" name="COMPLETE" sourceRef="exclusivegateway2" targetRef="MPK">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("COMPLETE")}</conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway6" name="Exclusive Gateway" />
+    <sequenceFlow id="flow30" sourceRef="MPK" targetRef="exclusivegateway6" />
+    <sequenceFlow id="flow31" name="SENDBACK" sourceRef="exclusivegateway6" targetRef="FDE_CHECKER">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("SENDBACK")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow32" name="REJECT" sourceRef="exclusivegateway6" targetRef="exclusivegateway4">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("REJECT")}</conditionExpression>
+    </sequenceFlow>
+    <userTask id="CU" activiti:candidateGroups="ROLE_CU" name="Credit Underwriter" xmlns:activiti="http://activiti.org/bpmn" />
+    <sequenceFlow id="flow33" name="COMPLETE" sourceRef="exclusivegateway6" targetRef="CU">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("COMPLETE")}</conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway7" name="Exclusive Gateway" />
+    <sequenceFlow id="flow34" sourceRef="CU" targetRef="exclusivegateway7" />
+    <userTask id="LEGAL" activiti:candidateGroups="ROLE_LEGAL" name="Legal" xmlns:activiti="http://activiti.org/bpmn" />
+    <sequenceFlow id="flow35" name="COMPLETE" sourceRef="exclusivegateway7" targetRef="LEGAL">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("COMPLETE")}</conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway8" name="Exclusive Gateway" />
+    <sequenceFlow id="flow36" sourceRef="LEGAL" targetRef="exclusivegateway8" />
+    <userTask id="PDC" activiti:candidateGroups="ROLE_PDC" name="Pre Disbursement Call" xmlns:activiti="http://activiti.org/bpmn" />
+    <sequenceFlow id="flow37" name="COMPLETE" sourceRef="exclusivegateway8" targetRef="PDC">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("COMPLETE")}</conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway9" name="Exclusive Gateway" />
+    <sequenceFlow id="flow38" sourceRef="PDC" targetRef="exclusivegateway9" />
+    <userTask id="APPROVAL" activiti:candidateGroups="ROLE_APPROVAL" name="Approval" xmlns:activiti="http://activiti.org/bpmn" />
+    <sequenceFlow id="flow39" name="COMPLETE" sourceRef="exclusivegateway9" targetRef="APPROVAL">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("COMPLETE")}</conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway10" name="Exclusive Gateway" />
+    <sequenceFlow id="flow40" sourceRef="APPROVAL" targetRef="exclusivegateway10" />
+    <sequenceFlow id="flow41" name="COMPLETE" sourceRef="exclusivegateway10" targetRef="servicetask4">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("COMPLETE")}</conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway11" name="Exclusive Gateway" />
+    <sequenceFlow id="flow42" sourceRef="servicetask4" targetRef="exclusivegateway11" />
+    <userTask id="MAINTENANCE_HO" activiti:candidateGroups="ROLE_MAINTENANCE_HO" name="Maintenance HO" xmlns:activiti="http://activiti.org/bpmn" />
+    <sequenceFlow id="flow43" name="SENDBACK" sourceRef="exclusivegateway11" targetRef="MAINTENANCE_HO">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("SENDBACK")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow44" name="SENDBACK" sourceRef="exclusivegateway7" targetRef="MPK">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("SENDBACK")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow45" name="SENDBACK" sourceRef="exclusivegateway8" targetRef="CU">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("SENDBACK")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow46" name="SENDBACK" sourceRef="exclusivegateway9" targetRef="LEGAL">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("SENDBACK")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow47" name="SENDBACK" sourceRef="exclusivegateway10" targetRef="PDC">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("SENDBACK")}</conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent3" name="End" />
+    <sequenceFlow id="flow49" name="COMPLETE" sourceRef="exclusivegateway11" targetRef="endevent3">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("COMPLETE")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow51" name="REJECT" sourceRef="exclusivegateway7" targetRef="exclusivegateway4">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("REJECT")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow52" name="REJECT" sourceRef="exclusivegateway8" targetRef="exclusivegateway4">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("REJECT")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow53" name="REJECT" sourceRef="exclusivegateway9" targetRef="exclusivegateway4">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("REJECT")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow54" name="REJECT" sourceRef="exclusivegateway10" targetRef="exclusivegateway4">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("REJECT")}</conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="servicetask4" activiti:class="com.pefindo.los.servicetask.ProcessHOService" name="HO" xmlns:activiti="http://activiti.org/bpmn" />
+    <exclusiveGateway id="exclusivegateway12" name="Exclusive Gateway" />
+    <sequenceFlow id="flow55" sourceRef="MAINTENANCE_HO" targetRef="exclusivegateway12" />
+    <sequenceFlow id="flow56" name="COMPLETE" sourceRef="exclusivegateway12" targetRef="servicetask4">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("COMPLETE")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow57" name="SENDBACK" sourceRef="exclusivegateway12" targetRef="APPROVAL">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("SENDBACK")}</conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="MCP_SERVICE" activiti:class="com.pefindo.los.servicetask.MCPService" name="MCP" xmlns:activiti="http://activiti.org/bpmn" />
+    <sequenceFlow id="flow58" sourceRef="MCP_SERVICE" targetRef="parallelgateway2" />
+    <parallelGateway id="parallelgateway2" name="Exclusive Gateway" />
+    <userTask id="PRESCREEN" activiti:candidateGroups="ROLE_PRE_SCREEN" name="PreScreen" xmlns:activiti="http://activiti.org/bpmn">
+      <documentation>
+        ${nextCode.equals("REJECT") || mcpPass.equals("NOTPASS") || dedupPass.equals("NOTPASS") || blacklistPass.equals("NOTPASS") || bicheckPass.equals("NOTPASS")}
+        ${nextCode.equals("COMPLETE") &amp;&amp; mcpPass.equals("PASS") &amp;&amp; dedupPass.equals("PASS") &amp;&amp; blacklistPass.equals("PASS") &amp;&amp; bicheckPass.equals("PASS")}
+      </documentation>
+      <extensionElements>
+        <activiti:taskListener event="complete" delegateExpression="${preScreenTaskListener}">
+        </activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow59" sourceRef="PRESCREEN" targetRef="exclusivegateway13" />
+    <exclusiveGateway id="exclusivegateway13" name="Exclusive Gateway" />
+    <sequenceFlow id="flow60" name="COMPLETE" sourceRef="exclusivegateway13" targetRef="FDE">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("COMPLETE")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow61" name="REJECT" sourceRef="exclusivegateway13" targetRef="exclusivegateway4">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("REJECT")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow62" name="SENDBACK" sourceRef="exclusivegateway13" targetRef="IDE_CHECKER">
+      <conditionExpression xsi:type="tFormalExpression">${nextCode.equals("SENDBACK")}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow64" sourceRef="parallelgateway2" targetRef="inclusivegateway1" />
+    <inclusiveGateway id="inclusivegateway1" name="Exclusive Gateway" />
+    <sequenceFlow id="flow65" sourceRef="inclusivegateway1" targetRef="exclusivegateway4" />
+    <sequenceFlow id="flow66" sourceRef="inclusivegateway1" targetRef="PRESCREEN" />
+    <serviceTask id="servicetask5" activiti:class="com.pefindo.los.servicetask.ScoringService" name="Scoring Engine" xmlns:activiti="http://activiti.org/bpmn" />
+    <sequenceFlow id="flow67" sourceRef="parallelgateway1" targetRef="servicetask5" />
+    <sequenceFlow id="flow68" sourceRef="servicetask5" targetRef="parallelgateway2" />
+  </process>
+  <BPMNDiagram id="BPMNDiagram_losFlow" xmlns="http://www.omg.org/spec/BPMN/20100524/DI">
+    <BPMNPlane id="BPMNPlane_losFlow" xmlns:q1="http://www.omg.org/spec/BPMN/20100524/MODEL" bpmnElement="q1:losFlow">
+      <BPMNShape id="BPMNShape_startevent1" bpmnElement="q1:startevent1">
+        <Bounds x="-430" y="159" width="35" height="35" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_IDE" bpmnElement="q1:IDE">
+        <Bounds x="-340" y="149" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_IDE_CHECKER" bpmnElement="q1:IDE_CHECKER">
+        <Bounds x="-80" y="149" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_exclusivegateway1" bpmnElement="q1:exclusivegateway1">
+        <Bounds x="93" y="157" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_parallelgateway1" bpmnElement="q1:parallelgateway1">
+        <Bounds x="225" y="156" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_DEDUP_SERVICE" bpmnElement="q1:DEDUP_SERVICE">
+        <Bounds x="310" y="149" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_BLACKLIST_SERVICE" bpmnElement="q1:BLACKLIST_SERVICE">
+        <Bounds x="310" y="237" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_BICHECK_SERVICE" bpmnElement="q1:BICHECK_SERVICE">
+        <Bounds x="310" y="327" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_FDE" bpmnElement="q1:FDE">
+        <Bounds x="905" y="152" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_FDE_CHECKER" bpmnElement="q1:FDE_CHECKER">
+        <Bounds x="1140" y="152" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_exclusivegateway2" bpmnElement="q1:exclusivegateway2">
+        <Bounds x="1270" y="159" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_exclusivegateway3" bpmnElement="q1:exclusivegateway3">
+        <Bounds x="-180" y="156" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_endevent2" bpmnElement="q1:endevent2">
+        <Bounds x="-177" y="599" width="35" height="35" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_exclusivegateway4" bpmnElement="q1:exclusivegateway4">
+        <Bounds x="-180" y="509" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_exclusivegateway5" bpmnElement="q1:exclusivegateway5">
+        <Bounds x="1070" y="159" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_MPK" bpmnElement="q1:MPK">
+        <Bounds x="1355" y="152" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_exclusivegateway6" bpmnElement="q1:exclusivegateway6">
+        <Bounds x="1505" y="160" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_CU" bpmnElement="q1:CU">
+        <Bounds x="1590" y="153" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_exclusivegateway7" bpmnElement="q1:exclusivegateway7">
+        <Bounds x="1740" y="161" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_LEGAL" bpmnElement="q1:LEGAL">
+        <Bounds x="1825" y="154" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_exclusivegateway8" bpmnElement="q1:exclusivegateway8">
+        <Bounds x="1975" y="162" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_PDC" bpmnElement="q1:PDC">
+        <Bounds x="2060" y="155" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_exclusivegateway9" bpmnElement="q1:exclusivegateway9">
+        <Bounds x="2210" y="163" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_APPROVAL" bpmnElement="q1:APPROVAL">
+        <Bounds x="2295" y="156" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_exclusivegateway10" bpmnElement="q1:exclusivegateway10">
+        <Bounds x="2445" y="164" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_exclusivegateway11" bpmnElement="q1:exclusivegateway11">
+        <Bounds x="2680" y="165" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_MAINTENANCE_HO" bpmnElement="q1:MAINTENANCE_HO">
+        <Bounds x="2648" y="40" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_endevent3" bpmnElement="q1:endevent3">
+        <Bounds x="3020" y="168" width="35" height="35" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_servicetask4" bpmnElement="q1:servicetask4">
+        <Bounds x="2530" y="157" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_exclusivegateway12" bpmnElement="q1:exclusivegateway12">
+        <Bounds x="2562" y="47" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_MCP_SERVICE" bpmnElement="q1:MCP_SERVICE">
+        <Bounds x="310" y="57" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_parallelgateway2" bpmnElement="q1:parallelgateway2">
+        <Bounds x="454" y="158" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_PRESCREEN" bpmnElement="q1:PRESCREEN">
+        <Bounds x="650" y="150" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_exclusivegateway13" bpmnElement="q1:exclusivegateway13">
+        <Bounds x="780" y="156" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_inclusivegateway1" bpmnElement="q1:inclusivegateway1">
+        <Bounds x="539" y="159" width="40" height="40" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNShape id="BPMNShape_servicetask5" bpmnElement="q1:servicetask5">
+        <Bounds x="310" y="410" width="105" height="55" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+      </BPMNShape>
+      <BPMNEdge id="BPMNEdge_flow1" bpmnElement="q1:flow1">
+        <waypoint x="-395" y="176" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-340" y="176" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow3" bpmnElement="q1:flow3">
+        <waypoint x="25" y="176" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="93" y="177" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow4" bpmnElement="q1:flow4">
+        <waypoint x="113" y="197" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="112" y="404" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-288" y="404" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-288" y="204" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="27" y="579" width="56" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow5" bpmnElement="q1:flow5">
+        <waypoint x="133" y="177" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="225" y="176" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="143" y="177" width="53" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow6" bpmnElement="q1:flow6">
+        <waypoint x="245" y="156" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="245" y="86" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="310" y="84" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow7" bpmnElement="q1:flow7">
+        <waypoint x="265" y="176" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="310" y="176" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow8" bpmnElement="q1:flow8">
+        <waypoint x="245" y="196" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="245" y="264" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="310" y="264" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow9" bpmnElement="q1:flow9">
+        <waypoint x="245" y="196" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="245" y="356" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="310" y="354" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow11" bpmnElement="q1:flow11">
+        <waypoint x="415" y="176" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="454" y="178" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow12" bpmnElement="q1:flow12">
+        <waypoint x="415" y="264" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="474" y="263" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="474" y="198" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow13" bpmnElement="q1:flow13">
+        <waypoint x="415" y="354" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="474" y="355" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="474" y="198" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow16" bpmnElement="q1:flow16">
+        <waypoint x="1245" y="179" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1270" y="179" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow17" bpmnElement="q1:flow17">
+        <waypoint x="1290" y="199" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1289" y="369" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1098" y="369" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="957" y="369" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="957" y="207" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="1300" y="199" width="56" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow18" bpmnElement="q1:flow18">
+        <waypoint x="-235" y="176" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-180" y="176" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow19" bpmnElement="q1:flow19">
+        <waypoint x="-140" y="176" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-80" y="176" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="-410" y="528" width="53" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow21" bpmnElement="q1:flow21">
+        <waypoint x="-160" y="196" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-160" y="509" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="-470" y="588" width="37" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow22" bpmnElement="q1:flow22">
+        <waypoint x="-160" y="549" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-160" y="599" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow23" bpmnElement="q1:flow23">
+        <waypoint x="113" y="197" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="112" y="525" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-140" y="529" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="25" y="440" width="37" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow25" bpmnElement="q1:flow25">
+        <waypoint x="1010" y="179" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1070" y="179" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow26" bpmnElement="q1:flow26">
+        <waypoint x="1090" y="159" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1089" y="70" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="702" y="70" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="702" y="150" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="1100" y="159" width="56" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow27" bpmnElement="q1:flow27">
+        <waypoint x="1110" y="179" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1140" y="179" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="1120" y="179" width="53" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow28" bpmnElement="q1:flow28">
+        <waypoint x="1090" y="199" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1088" y="528" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-140" y="529" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="1100" y="199" width="37" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow29" bpmnElement="q1:flow29">
+        <waypoint x="1310" y="179" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1355" y="179" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="1320" y="179" width="53" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow30" bpmnElement="q1:flow30">
+        <waypoint x="1460" y="179" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1505" y="180" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow31" bpmnElement="q1:flow31">
+        <waypoint x="1525" y="160" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1524" y="129" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1342" y="130" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1192" y="129" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1192" y="152" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="1535" y="160" width="56" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow32" bpmnElement="q1:flow32">
+        <waypoint x="1525" y="200" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1520" y="525" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-140" y="529" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="1535" y="200" width="37" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow33" bpmnElement="q1:flow33">
+        <waypoint x="1545" y="180" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1590" y="180" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="1555" y="180" width="53" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow34" bpmnElement="q1:flow34">
+        <waypoint x="1695" y="180" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1740" y="181" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow35" bpmnElement="q1:flow35">
+        <waypoint x="1780" y="181" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1825" y="181" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="1790" y="181" width="53" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow36" bpmnElement="q1:flow36">
+        <waypoint x="1930" y="181" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1975" y="182" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow37" bpmnElement="q1:flow37">
+        <waypoint x="2015" y="182" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2060" y="182" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="2025" y="182" width="53" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow38" bpmnElement="q1:flow38">
+        <waypoint x="2165" y="182" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2210" y="183" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow39" bpmnElement="q1:flow39">
+        <waypoint x="2250" y="183" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2295" y="183" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="2260" y="183" width="53" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow40" bpmnElement="q1:flow40">
+        <waypoint x="2400" y="183" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2445" y="184" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow41" bpmnElement="q1:flow41">
+        <waypoint x="2485" y="184" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2530" y="184" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="2495" y="184" width="53" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow42" bpmnElement="q1:flow42">
+        <waypoint x="2635" y="184" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2680" y="185" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow43" bpmnElement="q1:flow43">
+        <waypoint x="2700" y="165" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2700" y="95" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="2710" y="165" width="56" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow44" bpmnElement="q1:flow44">
+        <waypoint x="1760" y="161" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1760" y="108" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1612" y="109" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1404" y="110" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1407" y="152" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="1770" y="161" width="56" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow45" bpmnElement="q1:flow45">
+        <waypoint x="1995" y="162" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1992" y="92" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1832" y="92" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1640" y="92" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1642" y="153" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="2005" y="162" width="56" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow46" bpmnElement="q1:flow46">
+        <waypoint x="2230" y="163" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2228" y="64" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2068" y="64" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1876" y="64" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1877" y="154" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="2240" y="163" width="56" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow47" bpmnElement="q1:flow47">
+        <waypoint x="2465" y="164" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2461" y="92" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2293" y="92" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2112" y="93" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2112" y="155" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="2475" y="164" width="56" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow49" bpmnElement="q1:flow49">
+        <waypoint x="2720" y="185" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="3020" y="185" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="2730" y="185" width="53" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow51" bpmnElement="q1:flow51">
+        <waypoint x="1760" y="201" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1757" y="528" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-140" y="529" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="1770" y="201" width="37" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow52" bpmnElement="q1:flow52">
+        <waypoint x="1995" y="202" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="1993" y="528" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-140" y="529" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="2005" y="202" width="37" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow53" bpmnElement="q1:flow53">
+        <waypoint x="2230" y="203" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2228" y="528" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-140" y="529" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="2240" y="203" width="37" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow54" bpmnElement="q1:flow54">
+        <waypoint x="2465" y="204" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2464" y="528" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-140" y="529" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="2475" y="204" width="37" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow55" bpmnElement="q1:flow55">
+        <waypoint x="2648" y="67" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2602" y="67" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow56" bpmnElement="q1:flow56">
+        <waypoint x="2582" y="87" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2582" y="157" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="2592" y="87" width="53" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow57" bpmnElement="q1:flow57">
+        <waypoint x="2562" y="67" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2345" y="64" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="2347" y="156" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="2572" y="67" width="56" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow58" bpmnElement="q1:flow58">
+        <waypoint x="415" y="84" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="474" y="83" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="474" y="158" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow59" bpmnElement="q1:flow59">
+        <waypoint x="755" y="177" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="780" y="176" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow60" bpmnElement="q1:flow60">
+        <waypoint x="820" y="176" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="905" y="179" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="830" y="176" width="53" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow61" bpmnElement="q1:flow61">
+        <waypoint x="800" y="196" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="799" y="528" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-140" y="529" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="810" y="196" width="100" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow62" bpmnElement="q1:flow62">
+        <waypoint x="800" y="156" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="799" y="19" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-29" y="19" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-28" y="149" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <BPMNLabel>
+          <Bounds x="810" y="156" width="56" height="14" xmlns="http://www.omg.org/spec/DD/20100524/DC" />
+        </BPMNLabel>
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow64" bpmnElement="q1:flow64">
+        <waypoint x="494" y="178" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="539" y="179" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow65" bpmnElement="q1:flow65">
+        <waypoint x="559" y="199" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="559" y="529" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="-140" y="529" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow66" bpmnElement="q1:flow66">
+        <waypoint x="579" y="179" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="650" y="177" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow67" bpmnElement="q1:flow67">
+        <waypoint x="245" y="196" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="245" y="437" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="310" y="437" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+      <BPMNEdge id="BPMNEdge_flow68" bpmnElement="q1:flow68">
+        <waypoint x="415" y="437" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="474" y="437" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+        <waypoint x="474" y="198" xmlns="http://www.omg.org/spec/DD/20100524/DI" />
+      </BPMNEdge>
+    </BPMNPlane>
+  </BPMNDiagram>
+  <p:properties id="dataEntryObject1">
+    <p:property id="firstName" label="" structureRef="System.String" isNullable="true" defaultValue="" />
+    <p:property id="lastName" structureRef="System.String" />
+    <p:property id="dob" structureRef="System.DateTime" />
+  </p:properties>
+</definitions>
