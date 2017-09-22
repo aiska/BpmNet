@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{236AAEEC-CB64-4194-855F-E9106EF468AF}</ProjectGuid>
+    <ProjectGuid>{32F1DE0C-9EDD-4889-8797-B2BB246085F7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BPMNET.Entity</RootNamespace>
     <AssemblyName>BPMNET.Entity</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -31,21 +31,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,54 +50,59 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefinitionVariable.cs" />
-    <Compile Include="DefinitionVariableStore.cs" />
-    <Compile Include="Deployment.cs" />
-    <Compile Include="DeploymentManager.cs" />
-    <Compile Include="EntityConstant.cs" />
-    <Compile Include="GuidKey\ProcessDefinition.cs" />
-    <Compile Include="GuidKey\ProcessDefinitionStore.cs" />
-    <Compile Include="GuidKey\ProcessInstance.cs" />
-    <Compile Include="GuidKey\ProcessInstanceStore.cs" />
-    <Compile Include="GuidKey\ProcessManager.cs" />
-    <Compile Include="GuidKey\ProcessTask.cs" />
-    <Compile Include="GuidKey\ProcessTaskStore.cs" />
-    <Compile Include="IntKey\BpmDbContext.cs" />
-    <Compile Include="IntKey\ProcessDefinition.cs" />
-    <Compile Include="IntKey\ProcessDefinitionStore.cs" />
-    <Compile Include="IntKey\ProcessInstance.cs" />
-    <Compile Include="BpmDbContext.cs" />
-    <Compile Include="Comment.cs" />
-    <Compile Include="Configuration\Config.cs" />
-    <Compile Include="Configuration\Section.cs" />
-    <Compile Include="EntityStore.cs" />
-    <Compile Include="GuidKey\BpmDbContext.cs" />
-    <Compile Include="HistoricActivityInstance.cs" />
-    <Compile Include="HistoricDetail.cs" />
-    <Compile Include="IdentityLink.cs" />
-    <Compile Include="IntKey\ProcessInstanceStore.cs" />
-    <Compile Include="IntKey\ProcessManager.cs" />
-    <Compile Include="IntKey\ProcessTask.cs" />
-    <Compile Include="IntKey\ProcessTaskStore.cs" />
-    <Compile Include="LogConstant.cs" />
-    <Compile Include="ProcessDefinition.cs" />
-    <Compile Include="ProcessDefinitionStore.cs" />
-    <Compile Include="ProcessEvent.cs" />
-    <Compile Include="ProcessInstance.cs" />
-    <Compile Include="ProcessItemDefinition.cs" />
-    <Compile Include="ProcessManager.cs" />
-    <Compile Include="ProcessInstanceStore.cs" />
-    <Compile Include="ProcessTask.cs" />
-    <Compile Include="ProcessTaskStore.cs" />
-    <Compile Include="ProcessValidator.cs" />
-    <Compile Include="ProcessVariables.cs" />
-    <Compile Include="ProcessVariablesStore.cs" />
+    <Compile Include="Context\BpmDbContext.cs" />
+    <Compile Include="Entity\Comment.cs" />
+    <Compile Include="Entity\FlowNodeEntity.cs" />
+    <Compile Include="Entity\ProcessEntity.cs" />
+    <Compile Include="Entity\DeploymentEntity.cs" />
+    <Compile Include="Entity\Definition.cs" />
+    <Compile Include="Entity\ProcessFlowEntity.cs" />
+    <Compile Include="Entity\ProcessInstanceEntity.cs" />
+    <Compile Include="Entity\DefinitionItemEntity.cs" />
+    <Compile Include="Entity\ProcessTaskEntity.cs" />
+    <Compile Include="Entity\ProcessVariableEntity.cs" />
+    <Compile Include="Entity\SequenceFlowEntity.cs" />
+    <Compile Include="Mapping\CommentMap.cs" />
+    <Compile Include="Mapping\FlowNodeMap.cs" />
+    <Compile Include="Mapping\ModelBuilderExtensions.cs" />
+    <Compile Include="Mapping\ProcessFlowMap.cs" />
+    <Compile Include="Mapping\ProcessMap.cs" />
+    <Compile Include="Mapping\DeploymentMap.cs" />
+    <Compile Include="Mapping\DefinitionMap.cs" />
+    <Compile Include="Mapping\ProcessInstanceMap.cs" />
+    <Compile Include="Mapping\DefinitionItemMap.cs" />
+    <Compile Include="Mapping\ProcessTaskMap.cs" />
+    <Compile Include="Mapping\ProcessVariablesMap.cs" />
+    <Compile Include="Mapping\SequenceFlowMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Store\BaseStore.cs" />
+    <Compile Include="Store\EntityStore.cs" />
+    <Compile Include="Store\ProcessInstanceStore.cs" />
+    <Compile Include="Store\ProcessDefinitionStore.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Validator\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BPMNET.Bpmn\BPMNET.Bpmn.csproj">
+      <Project>{d88b5143-539f-4e3c-b539-4ebf092f6578}</Project>
+      <Name>BPMNET.Bpmn</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMNET.ConditionalLibrary\BPMNET.Conditional.csproj">
+      <Project>{C6E3B21F-3144-4AEC-BD7E-BF49F5EAA718}</Project>
+      <Name>BPMNET.Conditional</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMNET.Configuration\BPMNET.Configuration.csproj">
+      <Project>{ca03570d-7dd2-4d8e-a268-ce4c58a87938}</Project>
+      <Name>BPMNET.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BPMNET.Core\BPMNET.Core.csproj">
       <Project>{83b646fe-d688-425f-ab1e-c9c0b21577cd}</Project>
       <Name>BPMNET.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMNET.Exception\BPMNET.Exception.csproj">
+      <Project>{EC52CEE0-229E-4FEA-98FA-526F680DCBA1}</Project>
+      <Name>BPMNET.Exception</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
