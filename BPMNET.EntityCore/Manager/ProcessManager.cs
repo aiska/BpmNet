@@ -27,47 +27,7 @@ namespace BPMNET.EntityCore.Manager
             taskStore = new ProcessTaskStore(context);
         }
 
-        public bool CheckCondition(string condition, IEnumerable<ProcessVariableBase> variables)
-        {
-            ExpressionContext context = new ExpressionContext();
-            context.Imports.AddType(typeof(string));
 
-            foreach (var variable in variables)
-            {
-                switch (variable.DataType.ToLower())
-                {
-                    case "short":
-                        context.Variables.Add(variable.Name, short.Parse(variable.Value));
-                        break;
-                    case "int":
-                        context.Variables.Add(variable.Name, int.Parse(variable.Value));
-                        break;
-                    case "long":
-                        context.Variables.Add(variable.Name, long.Parse(variable.Value));
-                        break;
-                    case "double":
-                        context.Variables.Add(variable.Name, double.Parse(variable.Value));
-                        break;
-                    case "decimal":
-                        context.Variables.Add(variable.Name, decimal.Parse(variable.Value));
-                        break;
-                    case "float":
-                        context.Variables.Add(variable.Name, decimal.Parse(variable.Value));
-                        break;
-                    case "datetime":
-                        context.Variables.Add(variable.Name, DateTime.Parse(variable.Value));
-                        break;
-                    case "string":
-                        context.Variables.Add(variable.Name, DateTime.Parse(variable.Value));
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            IDynamicExpression exp = context.CompileDynamic(condition);
-            return (bool)exp.Evaluate();
-        }
 
         public bool StartProcess(Guid processKey, string processInstanceName, string user)
         {
