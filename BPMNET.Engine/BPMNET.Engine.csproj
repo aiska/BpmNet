@@ -30,6 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.6.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.6.1\lib\net45\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <Reference Include="Mono.CSharp, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.CSharp.4.0.0.143\lib\4.5\Mono.CSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,8 +49,46 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Definition.cs" />
+    <Compile Include="Manager\DeploymentManagerExtension.cs" />
+    <Compile Include="Manager\Int\Instance.cs" />
+    <Compile Include="Manager\Int\InstanceTask.cs" />
+    <Compile Include="Manager\Int\ProcessInstanceManager.cs" />
+    <Compile Include="Manager\ProcessInstanceManagerBase.cs" />
+    <Compile Include="Helper\AsyncHelper.cs" />
+    <Compile Include="Manager\DeploymentManager.cs" />
+    <Compile Include="Manager\ProcessInstanceManagerExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BPMNET.Bpmn\BPMNET.Bpmn.csproj">
+      <Project>{d88b5143-539f-4e3c-b539-4ebf092f6578}</Project>
+      <Name>BPMNET.Bpmn</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMNET.ConditionalLibrary\BPMNET.Conditional.csproj">
+      <Project>{c6e3b21f-3144-4aec-bd7e-bf49f5eaa718}</Project>
+      <Name>BPMNET.Conditional</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMNET.Core\BPMNET.Core.csproj">
+      <Project>{83B646FE-D688-425F-AB1E-C9C0B21577CD}</Project>
+      <Name>BPMNET.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMNET.Entity\BPMNET.Entity.csproj">
+      <Project>{32F1DE0C-9EDD-4889-8797-B2BB246085F7}</Project>
+      <Name>BPMNET.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMNET.Exception\BPMNET.Exception.csproj">
+      <Project>{EC52CEE0-229E-4FEA-98FA-526F680DCBA1}</Project>
+      <Name>BPMNET.Exception</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="dto\" />
+    <Folder Include="Manager\Guid\" />
+    <Folder Include="Manager\Long\" />
+    <Folder Include="Manager\String\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
