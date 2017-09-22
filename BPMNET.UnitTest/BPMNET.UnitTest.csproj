@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BPMNET.UnitTest</RootNamespace>
     <AssemblyName>BPMNET.UnitTest</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -16,6 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,7 +68,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ProcessManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBpmResult.cs" />
     <Compile Include="TestBpmDefaultDbContext.cs" />
@@ -75,7 +75,6 @@
     <Compile Include="TestBpmContextManager.cs" />
     <Compile Include="TestProcessRuntimeManager.cs" />
     <Compile Include="TestProcessInstanceManager.cs" />
-    <Compile Include="MemoryCacheTest.cs" />
     <Compile Include="UnitTestProcessTaskStore.cs" />
     <Compile Include="UnitTestProcessTask.cs" />
     <Compile Include="UnitTestProcessDefinitionStore.cs" />
@@ -89,6 +88,10 @@
     <ProjectReference Include="..\BPMNET.Core\BPMNET.Core.csproj">
       <Project>{83b646fe-d688-425f-ab1e-c9c0b21577cd}</Project>
       <Name>BPMNET.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMNET.Entity.IntKey\BPMNET.Entity.IntKey.csproj">
+      <Project>{32f1de0c-9edd-4889-8797-b2bb246085f7}</Project>
+      <Name>BPMNET.Entity.IntKey</Name>
     </ProjectReference>
     <ProjectReference Include="..\BPMNET.Entity\BPMNET.Entity.csproj">
       <Project>{236aaeec-cb64-4194-855f-e9106ef468af}</Project>

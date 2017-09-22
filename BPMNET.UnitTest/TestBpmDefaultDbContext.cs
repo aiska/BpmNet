@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Diagnostics.CodeAnalysis;
 using BPMNET.Core;
+using BPMNET.Entity.Store;
 
 namespace BPMNET.UnitTest
 {
