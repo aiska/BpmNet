@@ -1,4 +1,5 @@
 ﻿using BPMNET.Bpmn.Exception;
+using BPMNET.Exception;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +15,7 @@ namespace BPMNET.Bpmn
         private const string NAME = "name";
         private const string NOT_IMPLEMENT = "Unknown Item Definition of ";
 
-        protected tDefinitions Definition { get; private set; }
+        public tDefinitions Definition { get; private set; }
         protected XmlDocument Doc { get; private set; }
 
         public bool IsModified { get; private set; }
@@ -85,10 +86,17 @@ namespace BPMNET.Bpmn
             Doc = new XmlDocument();
             using (var xmlStream = new StreamReader(fileName))
             {
-                var serializer = new XmlSerializer(typeof(tDefinitions));
-                Definition = (tDefinitions)serializer.Deserialize(xmlStream);
-                xmlStream.BaseStream.Position = 0;
-                Doc.Load(xmlStream);
+                try
+                {
+                    var serializer = new XmlSerializer(typeof(tDefinitions));
+                    Definition = (tDefinitions)serializer.Deserialize(xmlStream);
+                    xmlStream.BaseStream.Position = 0;
+                    Doc.Load(xmlStream);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new CouldNotLoadBpmnFileException(fileName, ex);
+                }
             }
         }
         #endregion
@@ -187,7 +195,8 @@ namespace BPMNET.Bpmn
             return (elm != null);
         }
 
-        public IEnumerable<tFlowNode> getFlowNode(tProcess process) {
+        public IEnumerable<tFlowNode> getFlowNode(tProcess process)
+        {
             process.ThrowIfNull();
             return process.Items.OfType<tFlowNode>();
         }
@@ -244,16 +253,21 @@ namespace BPMNET.Bpmn
             return process.Items.OfType<tStartEvent>();
         }
 
-        public tItemDefinition GetItemDefinition(tDefinitions definition, string itemSubjectRef)
+        public IEnumerable<tItemDefinition> GetAllItemDefinition()
         {
             try
             {
-                return definition.Items.OfType<tItemDefinition>().Single(t => t.id.Equals(itemSubjectRef));
+                return Definition.Items.OfType<tItemDefinition>();
             }
             catch (System.Exception)
             {
                 throw new ItemDefinitionNotFoundException("Item Definition Not Found in Definition");
             }
+        }
+
+        public tItemDefinition GetItemDefinition(tDefinitions definition, string id)
+        {
+            return definition.Items.OfType<tItemDefinition>().FirstOrDefault(t => t.id.Equals(id));
         }
 
         public bool TryGetItemDefinition(tDefinitions definition, string itemSubjectRef, out tItemDefinition item)

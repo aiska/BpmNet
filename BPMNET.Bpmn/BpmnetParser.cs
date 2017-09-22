@@ -26,7 +26,8 @@ namespace BPMNET.Bpmn
             }
         }
 
-        public static XmlDocument GetXmlDocument(string fileName) {
+        public static XmlDocument GetXmlDocument(string fileName)
+        {
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(fileName);
             return xmlDoc;
@@ -51,9 +52,9 @@ namespace BPMNET.Bpmn
             }
         }
 
-        public Task<tDefinitions> DeserializeDefinitionAsync(string fileName)
+        public async Task<tDefinitions> DeserializeDefinitionAsync(string fileName)
         {
-            return Task.Run(() => DeserializeDefinition(fileName));
+            return await Task.Run(() => DeserializeDefinition(fileName));
         }
 
         private static tProcess DeserializeProcess(string stringProcess)
@@ -65,14 +66,14 @@ namespace BPMNET.Bpmn
             }
         }
 
-        public Task<tProcess> DeserializeProcessAsync(string stringProcess)
+        public static async Task<tProcess> DeserializeProcessAsync(string stringProcess)
         {
-            return Task.Run(() => DeserializeProcess(stringProcess));
+            return await Task.Run(() => DeserializeProcess(stringProcess));
         }
 
-        public Task<string> SerializeProcessAsync(tProcess process)
+        public static async Task<string> SerializeProcessAsync(tProcess process)
         {
-            return Task.Run(() =>
+            return await Task.Run(() =>
             {
                 using (var textWriter = new StringWriter())
                 {
@@ -83,9 +84,9 @@ namespace BPMNET.Bpmn
             });
         }
 
-        public Task SerializeDefinitionAsync(string fileName, tDefinitions definition)
+        public static async Task SerializeDefinitionAsync(string fileName, tDefinitions definition)
         {
-            return Task.Run(() => SerializeDefinition(fileName, definition));
+            await Task.Run(() => SerializeDefinition(fileName, definition));
         }
     }
 }

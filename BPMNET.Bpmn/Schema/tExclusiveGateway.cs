@@ -18,7 +18,7 @@ namespace BPMNET.Bpmn
 
         private string defaultField;
 
-            [XmlAttribute(DataType = "IDREF")]
+        [XmlAttribute(DataType = "IDREF")]
         public string @default
         {
             get

@@ -27,7 +27,7 @@ namespace BPMNET.Bpmn
             gatewayDirectionField = tGatewayDirection.Unspecified;
         }
 
-            [XmlAttribute()]
+        [XmlAttribute()]
         [DefaultValue(tGatewayDirection.Unspecified)]
         public tGatewayDirection gatewayDirection
         {

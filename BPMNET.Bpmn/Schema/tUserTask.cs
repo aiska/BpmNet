@@ -25,7 +25,7 @@ namespace BPMNET.Bpmn
             implementationField = "##unspecified";
         }
 
-            [XmlElement("rendering")]
+        [XmlElement("rendering")]
         public tRendering[] rendering
         {
             get
@@ -38,7 +38,7 @@ namespace BPMNET.Bpmn
             }
         }
 
-            [XmlAttribute()]
+        [XmlAttribute()]
         [DefaultValue("##unspecified")]
         public string implementation
         {
@@ -51,5 +51,11 @@ namespace BPMNET.Bpmn
                 implementationField = value;
             }
         }
+
+        [XmlAttribute("group", Namespace = "http://www.bpmnet.org/bpmn")]
+        public string group { get; set; }
+
+        [XmlElement("approval", Namespace = "http://www.bpmnet.org/bpmn")]
+        public tApproval[] approval { get; set; }
     }
 }

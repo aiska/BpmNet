@@ -29,7 +29,7 @@ namespace BPMNET.Bpmn
             cancelRemainingInstancesField = true;
         }
 
-            public tExpression completionCondition
+        public tExpression completionCondition
         {
             get
             {
@@ -41,7 +41,7 @@ namespace BPMNET.Bpmn
             }
         }
 
-            [XmlAttribute()]
+        [XmlAttribute()]
         [DefaultValue(true)]
         public bool cancelRemainingInstances
         {
@@ -55,7 +55,7 @@ namespace BPMNET.Bpmn
             }
         }
 
-            [XmlAttribute()]
+        [XmlAttribute()]
         public tAdHocOrdering ordering
         {
             get
@@ -68,7 +68,7 @@ namespace BPMNET.Bpmn
             }
         }
 
-            [XmlIgnore()]
+        [XmlIgnore()]
         public bool orderingSpecified
         {
             get

@@ -147,15 +147,11 @@
     <Compile Include="BpmnRootElement.cs" />
     <Compile Include="Check.cs" />
     <Compile Include="BpmnNetDefinition.cs" />
-    <Compile Include="Exception\ItemDefinitionNotFoundException.cs" />
-    <Compile Include="Exception\ProcessNotFoundException.cs" />
     <Compile Include="ItemDefinitionType.cs" />
+    <Compile Include="ProcessItem.cs" />
+    <Compile Include="Schema\tApproval.cs" />
     <Compile Include="sItemObject.cs" />
     <Compile Include="sObject.cs" />
-    <Compile Include="validation\sNumberRangeValidation.cs" />
-    <Compile Include="validation\sDateRangeValidation.cs" />
-    <Compile Include="validation\sMaxLengthValidation.cs" />
-    <Compile Include="validation\sMinLengthValidation.cs" />
     <Compile Include="Schema\Bounds.cs" />
     <Compile Include="Schema\BPMNDiagram.cs" />
     <Compile Include="Schema\BPMNEdge.cs" />
@@ -328,14 +324,24 @@
     <Compile Include="Schema\tUserTask.cs" />
     <Compile Include="sProperties.cs" />
     <Compile Include="sProperty.cs" />
-    <Compile Include="validation\sRegexMatchValidation.cs" />
-    <Compile Include="validation\sValidation.cs" />
+    <Compile Include="validation\sValidation.cs">
+      <SubType>code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="bpmnet.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BPMNET.Exception\BPMNET.Exception.csproj">
+      <Project>{EC52CEE0-229E-4FEA-98FA-526F680DCBA1}</Project>
+      <Name>BPMNET.Exception</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Exception\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

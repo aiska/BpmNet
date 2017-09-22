@@ -25,7 +25,7 @@ namespace BPMNET.Bpmn
             cancelActivityField = true;
         }
 
-            [XmlAttribute()]
+        [XmlAttribute()]
         [DefaultValue(true)]
         public bool cancelActivity
         {
@@ -39,7 +39,7 @@ namespace BPMNET.Bpmn
             }
         }
 
-            [XmlAttribute()]
+        [XmlAttribute()]
         public XmlQualifiedName attachedToRef
         {
             get

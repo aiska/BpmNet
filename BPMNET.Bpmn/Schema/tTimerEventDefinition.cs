@@ -20,7 +20,7 @@ namespace BPMNET.Bpmn
 
         private ItemChoiceType itemElementNameField;
 
-            [XmlElement("timeCycle", typeof(tExpression))]
+        [XmlElement("timeCycle", typeof(tExpression))]
         [XmlElement("timeDate", typeof(tExpression))]
         [XmlElement("timeDuration", typeof(tExpression))]
         [XmlChoiceIdentifier("ItemElementName")]
@@ -36,7 +36,7 @@ namespace BPMNET.Bpmn
             }
         }
 
-            [XmlIgnore()]
+        [XmlIgnore()]
         public ItemChoiceType ItemElementName
         {
             get

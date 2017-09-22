@@ -31,7 +31,7 @@ namespace BPMNET.Bpmn
             triggeredByEventField = false;
         }
 
-            [XmlElement("laneSet")]
+        [XmlElement("laneSet")]
         public tLaneSet[] laneSet
         {
             get
@@ -44,7 +44,7 @@ namespace BPMNET.Bpmn
             }
         }
 
-            [XmlElement("adHocSubProcess", typeof(tAdHocSubProcess))]
+        [XmlElement("adHocSubProcess", typeof(tAdHocSubProcess))]
         [XmlElement("boundaryEvent", typeof(tBoundaryEvent))]
         [XmlElement("businessRuleTask", typeof(tBusinessRuleTask))]
         [XmlElement("callActivity", typeof(tCallActivity))]
@@ -88,7 +88,7 @@ namespace BPMNET.Bpmn
             }
         }
 
-            [XmlElement("artifact", typeof(tArtifact))]
+        [XmlElement("artifact", typeof(tArtifact))]
         [XmlElement("association", typeof(tAssociation))]
         [XmlElement("group", typeof(tGroup))]
         [XmlElement("textAnnotation", typeof(tTextAnnotation))]
@@ -104,7 +104,7 @@ namespace BPMNET.Bpmn
             }
         }
 
-            [XmlAttribute()]
+        [XmlAttribute()]
         [DefaultValue(false)]
         public bool triggeredByEvent
         {

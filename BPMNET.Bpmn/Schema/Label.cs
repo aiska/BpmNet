@@ -19,7 +19,7 @@ namespace BPMNET.Bpmn
 
         private Bounds boundsField;
 
-            [XmlElement(Namespace = "http://www.omg.org/spec/DD/20100524/DC")]
+        [XmlElement(Namespace = "http://www.omg.org/spec/DD/20100524/DC")]
         public Bounds Bounds
         {
             get
