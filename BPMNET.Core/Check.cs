@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BPMNET.Core
 {
@@ -12,12 +8,24 @@ namespace BPMNET.Core
     {
         public static void ThrowIfNull(this object obj)
         {
+            obj.ThrowIfNull(obj.GetType().Name);
+        }
+
+        public static void ThrowIfNull(this object obj, string name)
+        {
             if (obj == null)
             {
-                throw new ArgumentNullException(obj.GetType().Name);
+                throw new ArgumentNullException(name, string.Format("Parameter '{0}' is null", name));
             }
         }
 
+        public static void ThrowIfNull(this object obj, Exception exception)
+        {
+            if (obj == null)
+            {
+                throw exception;
+            }
+        }
 
         public static void ThrowIfDisposed(this IDisposable obj, bool disposed)
         {

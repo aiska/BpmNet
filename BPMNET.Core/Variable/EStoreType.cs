@@ -10,9 +10,11 @@ namespace BPMNET.Core.Variable
     public enum EStoreType
     {
         BitValue,
+        ShortValue,
+        IntValue,
         LongValue,
         DecimalValue,
-        FloatValue,
+        DoubleValue,
         DateTimeValue,
         StringValue
     }

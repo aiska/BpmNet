@@ -3,12 +3,10 @@ namespace BPMNET.Core
 {
     public interface IComment<TKey>
     {
-        TKey Id { get; set; }
+        TKey CommentId { get; set; }
         TKey ProcessInstanceId { get; set; }
-        TKey ProcessTaskId { get; set; }
-        DateTime CreateDate { get; set; }
-        string FullMessage { get; set; }
-        string Type { get; set; }
-        string UserId { get; set; }
+        DateTime UtcCreateDate { get; set; }
+        string CommentText { get; set; }
+        string User { get; set; }
     }
 }

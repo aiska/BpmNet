@@ -30,6 +30,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
@@ -51,39 +52,51 @@
     <Compile Include="BpmResult.cs" />
     <Compile Include="Check.cs" />
     <Compile Include="EKeyType.cs" />
-    <Compile Include="ESuspensionState.cs" />
     <Compile Include="EDelegationState.cs" />
     <Compile Include="EIdentityLinkType.cs" />
+    <Compile Include="Entity\IProcessVariable.cs" />
+    <Compile Include="Entity\ProcessFlowEntity.cs" />
     <Compile Include="EProcessItemType.cs" />
-    <Compile Include="Exception\BpmNetException.cs" />
-    <Compile Include="Exception\TaskAlreadyClaimedException.cs" />
-    <Compile Include="IAttachment.cs" />
+    <Compile Include="ESuspensionState.cs" />
+    <Compile Include="Entity\IActivity.cs" />
+    <Compile Include="Entity\IApproval.cs" />
+    <Compile Include="Entity\IAttachment.cs" />
+    <Compile Include="Entity\IAuditTrail.cs" />
     <Compile Include="IBpmEvent.cs" />
     <Compile Include="IBpmnParser.cs" />
     <Compile Include="ICacheStore.cs" />
     <Compile Include="IComment.cs" />
-    <Compile Include="IDeployment.cs" />
+    <Compile Include="IDataObject.cs" />
+    <Compile Include="Entity\IDefinition.cs" />
+    <Compile Include="Entity\IDefinitionVariable.cs" />
+    <Compile Include="Entity\IDeployment.cs" />
+    <Compile Include="IDeploymentManager.cs" />
     <Compile Include="IDeploymentStore.cs" />
     <Compile Include="IDeploymentValidator.cs" />
     <Compile Include="IFindById.cs" />
+    <Compile Include="IFlowNode.cs" />
+    <Compile Include="Runtime\IGroup.cs" />
     <Compile Include="IHasRevision.cs" />
     <Compile Include="IHistoricActivityInstance.cs" />
     <Compile Include="IHistoricData .cs" />
     <Compile Include="IHistoricDetail.cs" />
     <Compile Include="IIdentityLink.cs" />
     <Compile Include="IModel.cs" />
-    <Compile Include="IProcessDefinition.cs" />
+    <Compile Include="IProcess.cs" />
     <Compile Include="IProcessDefinitionKey.cs" />
-    <Compile Include="IProcessDefinitionManager.cs" />
-    <Compile Include="IProcessDefinitionStore.cs" />
+    <Compile Include="Runtime\IInstance.cs" />
+    <Compile Include="Runtime\IInstanceTask.cs" />
+    <Compile Include="Runtime\ITenant.cs" />
+    <Compile Include="Runtime\IUser.cs" />
+    <Compile Include="Store\IProcessDefinitionStore.cs" />
     <Compile Include="IProcessDefinitionValidator.cs" />
     <Compile Include="IProcessEvent.cs" />
+    <Compile Include="IProcessFlowStore.cs" />
     <Compile Include="IProcessInstance.cs" />
     <Compile Include="IProcessInstanceKey.cs" />
     <Compile Include="IProcessInstanceManager.cs" />
-    <Compile Include="IProcessInstanceStore.cs" />
     <Compile Include="IProcessInstanceValidator.cs" />
-    <Compile Include="IProcessItemDefinition.cs" />
+    <Compile Include="Entity\IDefinitionItem.cs" />
     <Compile Include="IProcessTask.cs" />
     <Compile Include="IProcessTaskKey.cs" />
     <Compile Include="IProcessTaskManager.cs" />
@@ -92,16 +105,23 @@
     <Compile Include="IProcessValidator.cs" />
     <Compile Include="IQueryableProcessInstanceStore.cs" />
     <Compile Include="IQueryableStore.cs" />
+    <Compile Include="Runtime\IRole.cs" />
     <Compile Include="IRuntimeProvider.cs" />
     <Compile Include="IRuntimeStore.cs" />
     <Compile Include="IRuntimeValidator.cs" />
+    <Compile Include="ISequenceFlow.cs" />
     <Compile Include="IStore.cs" />
     <Compile Include="ITaskService.cs" />
+    <Compile Include="ITimeTrail.cs" />
+    <Compile Include="IUserTrail.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="IVariableInstance.cs" />
-    <Compile Include="ProcessDefinitionCache.cs" />
-    <Compile Include="ProcessInstanceCache.cs" />
+    <Compile Include="ProcessInstanceStatus.cs" />
+    <Compile Include="ProcessItemCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Store\IProcessInstanceStore.cs" />
+    <Compile Include="TaskStatus.cs" />
+    <Compile Include="TaskType.cs" />
     <Compile Include="Variable\EStoreType.cs" />
     <Compile Include="Variable\IVariable.cs" />
     <Compile Include="Variable\VariableParser.cs" />

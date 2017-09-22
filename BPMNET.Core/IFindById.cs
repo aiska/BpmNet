@@ -2,9 +2,8 @@
 
 namespace BPMNET.Core
 {
-    public interface IFindById<TKey, T>
+    public interface IFindById<TKey, TEntity>
     {
-        Task<T> FindByIdAsync(TKey id);
-        T FindById(TKey id);
+        Task<TEntity> FindByIdAsync(TKey id);
     }
 }

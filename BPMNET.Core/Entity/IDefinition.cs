@@ -1,15 +1,12 @@
-﻿using System;
-
-namespace BPMNET.Core
+﻿namespace BPMNET.Core
 {
-    public interface IProcessDefinition<TKey>
+    public interface IDefinition<TKey>
     {
-
         /// <summary>
         /// The Deployment Id in which this process definition is contained.
         /// </summary>
         /// <returns></returns>
-        TKey Id { get; set; }
+        TKey DefinitionId { get; set; }
 
         /// <summary>
         /// The Deployment Id in which this process definition is contained.
@@ -17,19 +14,17 @@ namespace BPMNET.Core
         /// <returns></returns>
         TKey DeploymentId { get; set; }
 
-        string DefinitionId { get; set; }
-
         /// <summary>
         /// label used for display purposes
         /// </summary>
         /// <returns></returns>
-        string DefinitionName { get; set; }
+        string Name { get; set; }
 
         /// <summary>
         /// unique name for all versions this process definitions
         /// </summary>
         /// <returns></returns>
-        //string Key { get; set; }
+        string Id { get; set; }
 
         /// <summary>
         /// description of this process
@@ -52,7 +47,7 @@ namespace BPMNET.Core
         /// Does this process definition has a {@link FormService#getStartFormData(string) CreateProcessInstanceAsync form Key}.
         /// </summary>
         /// <returns></returns>
-        bool HasStartFormKey { get; set; }
+        //bool HasStartFormKey { get; set; }
 
         /// <summary>
         /// Does this process definition has a graphical notation defined (such that a diagram can be generated)?
@@ -64,12 +59,16 @@ namespace BPMNET.Core
         /// Returns true if the process definition is in suspended state.
         /// </summary>
         /// <returns></returns>
-        bool IsSuspended { get; set; }
+        //bool IsSuspended { get; set; }
 
         /// <summary>
         /// The tenant identifier of this process definition
         /// </summary>
         /// <returns></returns>
         //string TenantId { get; set; }
+        //ICollection<TProcessItemDefinitionEntity> Items { get; set; }
+
+        bool IsActive { get; set; }
+
     }
 }

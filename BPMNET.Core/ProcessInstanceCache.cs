@@ -1,9 +1,5 @@
-﻿
-
-using System;
-using System.Linq;
+﻿using System;
 using System.Runtime.Caching;
-using System.Threading.Tasks;
 
 namespace BPMNET.Core
 {
@@ -12,7 +8,7 @@ namespace BPMNET.Core
         where TProcessInstance : class, IProcessInstance<TKey>
     {
         private MemoryCache cache;
-        private CacheItemPolicy _policy;
+        //private CacheItemPolicy _policy;
         private readonly string prefix = "ProcIns";
         private static CacheItemPolicy policy = new CacheItemPolicy();
         private static ProcessInstanceCache<TKey, TProcessInstance> instance = null;
@@ -42,7 +38,6 @@ namespace BPMNET.Core
             cache = MemoryCache.Default;
         }
         #endregion
-
 
         #region Sub Routine ...
         private string getId(TKey id)

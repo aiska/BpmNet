@@ -3,9 +3,10 @@ using System.Threading.Tasks;
 
 namespace BPMNET.Core
 {
-    public interface IProcessDefinitionManager<TKey, TProcessDefinition>
+    public interface IProcessDefinitionManager<TKey, TProcessDefinition, TDeployment>
         where TKey : IEquatable<TKey>
-        where TProcessDefinition : class, IProcessDefinition<TKey>
+        where TProcessDefinition : class, IProcessDefinitionStore<TKey, TDeployment>
+        where TDeployment : class, IDeployment<TKey>
     {
         IProcessDefinitionValidator<TProcessDefinition> ProcessDefinitionValidator { get; set; }
         IProcessDefinitionStore<TKey, TProcessDefinition> Store { get; set; }

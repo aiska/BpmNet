@@ -19,7 +19,7 @@ namespace BPMNET.Core
         Task<BpmResult> CreateProcessInstanceAsync(TProcessInstance processInstance);
         BpmResult DeleteProcessInstance(TProcessInstance processInstance);
         Task<BpmResult> DeleteProcessInstanceAsync(TProcessInstance processInstance);
-        List<TProcessInstance> FindProcessInstanceByDefinitionId(TKey processDefinitionId);
+        IEnumerable<TProcessInstance> FindProcessInstanceByDefinitionId(TKey processDefinitionId);
         Task<TProcessInstance> FindProcessInstanceByDefinitionIdAsync(TKey processInstanceId);
         TProcessInstance FindProcessInstanceById(TKey processInstanceId);
         Task<TProcessInstance> FindProcessInstanceByIdAsync(TKey processInstanceId);

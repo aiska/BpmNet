@@ -66,8 +66,8 @@ namespace BPMNET.Core
         public virtual void Add(TProcessDefinition item)
         {
             Check.ThrowIfNull(item);
-            Check.ThrowIfNull(item.ProcessDefinitionId);
-            string key = getId(item.ProcessDefinitionId);
+            Check.ThrowIfNull(item.DefinitionId);
+            string key = getId(item.DefinitionId);
             cache.Add(key, item, policy);
             if (!string.IsNullOrWhiteSpace(item.Name)) cache.Add(getName(item.Name), key, policy);
         }
@@ -75,7 +75,7 @@ namespace BPMNET.Core
         public virtual void Set(TProcessDefinition item)
         {
             Check.ThrowIfNull(item);
-            string key = getId(item.ProcessDefinitionId);
+            string key = getId(item.DefinitionId);
             cache.Set(key, item, policy);
             if (!string.IsNullOrWhiteSpace(item.Name)) cache.Set(getName(item.Name), key, policy);
         }
@@ -83,7 +83,7 @@ namespace BPMNET.Core
         public virtual void Remove(TProcessDefinition item)
         {
             Check.ThrowIfNull(item);
-            string key = getId(item.ProcessDefinitionId);
+            string key = getId(item.DefinitionId);
             cache.Remove(key);
             if (!string.IsNullOrWhiteSpace(item.Name)) cache.Remove(getName(item.Name));
         }
