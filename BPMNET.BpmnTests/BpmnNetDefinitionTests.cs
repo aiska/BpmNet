@@ -11,23 +11,16 @@ namespace BPMNET.Bpmn.Tests
         public BpmnNetDefinitionTests()
         {
             //string bpmnFile = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "\\LosFlow.bpmn";
-            string bpmnFile = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\LosFlow.bpmn";
+            string bpmnFile = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "\\LosFlow4.bpmn";
             def = new BpmnNetDefinition(bpmnFile);
         }
 
         [TestMethod()]
         public void BpmnNetDefinitionTest()
         {
-            string bpmnFile = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\LosFlow.bpmn";
+            string bpmnFile = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "\\LosFlow.bpmn";
             def = new BpmnNetDefinition(bpmnFile);
         }
-
-        //[TestMethod()]
-        //public void BpmnNetDefinitionReadTest()
-        //{
-        //    string bpmnFile = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\LosFlow.bpmn";
-        //    BpmnNetDefinition.read(bpmnFile);
-        //}
 
         [TestMethod()]
         public void GetId()
@@ -56,7 +49,7 @@ namespace BPMNET.Bpmn.Tests
         [TestMethod()]
         public void GetItemDefinitionTypeTest()
         {
-            Assert.AreEqual(ItemDefinitionType.ItemDefinition, def.GetItemDefinitionType("de"));
+            Assert.AreEqual(ItemDefinitionType.ItemDefinition, def.GetItemDefinitionType("FistName"));
         }
 
         [TestMethod()]
@@ -76,7 +69,7 @@ namespace BPMNET.Bpmn.Tests
         public void TryGetProcessTest()
         {
             tProcess p = null;
-            def.TryGetProcess("de", out p);
+            def.TryGetProcess("losFlow", out p);
             Assert.IsNotNull(p);
         }
 
