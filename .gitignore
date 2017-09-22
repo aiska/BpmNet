@@ -8,3 +8,12 @@
 /BPMNET.Data/
 /BPMNET.Entity_Deprecated/
 /test/
+/LosFlow3.bpmn
+/LosFlow4.bpmn
+/LosFlow4.xml
+/TODO.txt
+/UserTaskTest.testTaskPropertiesNotNull.bpmn.xml
+/error.bpmn
+/subProcess.bpmn2
+/subProcess2.bpmn2
+/testParseNamespaceInConditionExpressionType.bpmn.xml
