@@ -37,7 +37,12 @@
   <ItemGroup>
     <Compile Include="BpmnProcessNotFoundException.cs" />
     <Compile Include="BpmnVariableEmptyException.cs" />
+    <Compile Include="CouldNotLoadBpmnFileException.cs" />
+    <Compile Include="FlowNodeException.cs" />
+    <Compile Include="ItemDefinitionNotFoundException.cs" />
+    <Compile Include="ProcessNotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StartEventNotFoundException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
