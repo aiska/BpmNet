@@ -49,14 +49,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Manager\DeploymentManagerExtension.cs" />
-    <Compile Include="Manager\Int\Instance.cs" />
-    <Compile Include="Manager\Int\InstanceTask.cs" />
+    <Compile Include="Manager\DefinitionManagerExtension.cs" />
+    <Compile Include="Manager\Int\DefinitionManager.cs" />
     <Compile Include="Manager\Int\ProcessInstanceManager.cs" />
+    <Compile Include="Manager\Int\ProcessTaskManager.cs" />
     <Compile Include="Manager\ProcessInstanceManagerBase.cs" />
     <Compile Include="Helper\AsyncHelper.cs" />
-    <Compile Include="Manager\DeploymentManager.cs" />
+    <Compile Include="Manager\DefinitionManager.cs" />
     <Compile Include="Manager\ProcessInstanceManagerExtension.cs" />
+    <Compile Include="Manager\ProcessTaskManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

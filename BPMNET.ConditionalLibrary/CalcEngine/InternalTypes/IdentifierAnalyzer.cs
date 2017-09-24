@@ -1,12 +1,9 @@
 ﻿
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
 using BPMNET.Condition.Parsing;
 using BPMNET.Condition.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime;
 using BPMNET.Condition.PublicTypes;
+using System;
+using System.Collections.Generic;
 
 namespace BPMNET.Condition.CalcEngine.InternalTypes
 {

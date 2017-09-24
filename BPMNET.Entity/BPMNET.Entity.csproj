@@ -75,10 +75,10 @@
     <Compile Include="Mapping\ProcessVariablesMap.cs" />
     <Compile Include="Mapping\SequenceFlowMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Store\BaseStore.cs" />
     <Compile Include="Store\EntityStore.cs" />
     <Compile Include="Store\ProcessInstanceStore.cs" />
     <Compile Include="Store\ProcessDefinitionStore.cs" />
+    <Compile Include="Store\ProcessTaskStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Validator\" />

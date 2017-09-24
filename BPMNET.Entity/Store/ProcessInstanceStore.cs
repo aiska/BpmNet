@@ -21,19 +21,13 @@ namespace BPMNET.Entity.Store
         protected bool DisposeContext { get; set; }
         protected string TenantId { get; set; }
         protected IUser User { get; set; }
-        protected ITenant Tenant { get; set; }
-
-        #endregion
-
-        #region Private Properties
-        private EntityStore<ProcessInstanceEntity> processInstanceStore;
-        private EntityStore<ProcessFlowEntity> processFlowStore;
-        private EntityStore<ProcessTaskEntity> processTaskStore;
-        private DbSet<ProcessDefinitionEntity> processEntity;
-        private DbSet<FlowNodeEntity> flowNodeEntity;
-        private DbSet<SequenceFlowEntity> sequenceEntity;
-        private DbSet<ProcessVariableEntity> processVariableEntity;
-
+        protected EntityStore<ProcessInstanceEntity> processInstanceStore { get; private set; }
+        protected EntityStore<ProcessFlowEntity> processFlowStore { get; private set; }
+        protected EntityStore<ProcessTaskEntity> processTaskStore { get; private set; }
+        protected DbSet<ProcessDefinitionEntity> processEntity { get; private set; }
+        protected DbSet<FlowNodeEntity> flowNodeEntity { get; private set; }
+        protected DbSet<SequenceFlowEntity> sequenceEntity { get; private set; }
+        protected DbSet<ProcessVariableEntity> processVariableEntity { get; private set; }
         #endregion
 
         #region Constructor
@@ -192,6 +186,65 @@ namespace BPMNET.Entity.Store
             }
             else if (ProcessItemCheck.IsGateway(flowNode.ItemType))
             {
+                if (ProcessItemCheck.IsExclusiveGateway(flowNode.ItemType))
+                {
+                    FlowNodeEntity nextNode = null;
+                    ExpressionContext context = new ExpressionContext();
+                    AddVariableCondition(context, await GetAllVariableAsync(processInstance.Id));
+
+                    // Exclusive gateway is a diversion point of a business process flow.
+                    // For a given instance of the process, there is only one of the paths can be taken.
+                    // If two possible paths will only execute one but not both.
+                    foreach (var sequence in await GetNextSequenceFlowAsync(flowNode.Id))
+                    {
+                        // Set default node
+                        nextNode = await GetFlowAsync(sequence.SourceId);
+                        if (!string.IsNullOrWhiteSpace(sequence.ConditionExpression) && EvaluateCondition(context, sequence.ConditionExpression))                // parse condition expression
+                        {
+                            break;
+                        }
+                    }
+                    if (nextNode == null) throw new ArgumentException("Next flow from flowNodeId: {0} is not found");
+                    //Save Process Flow
+                    await SaveProcessFlowAsync(processInstance.Id, flowNode.Id, nextNode.Id);
+
+                    //Flow next process
+                    await ProcessFlowAsync(processInstance, nextNode);
+                }
+                else if (ProcessItemCheck.IsInclusiveGateway(flowNode.ItemType))
+                {
+                    FlowNodeEntity nextNode = null;
+                    ExpressionContext context = new ExpressionContext();
+                    AddVariableCondition(context, await GetAllVariableAsync(processInstance.Id));
+
+                    // Inclusive gateway is also a division point of the business process. 
+                    // Unlike the exclusive gateway, inclusive gateway may trigger more than 1 out-going paths. 
+                    // Since inclusive gateway may trigger more than 1 out-going paths, the condition checking process will have a little bit different then the exclusive gateway. 
+                    foreach (var sequence in await GetNextSequenceFlowAsync(flowNode.Id))
+                    {
+                        if (string.IsNullOrWhiteSpace(sequence.ConditionExpression) || EvaluateCondition(context, sequence.ConditionExpression))
+                        {
+                            //Get Node
+                            nextNode = await GetFlowAsync(sequence.SourceId);
+
+                            //Save Process Flow
+                            await SaveProcessFlowAsync(processInstance.Id, flowNode.Id, nextNode.Id);
+
+                            //Flow next process
+                            await ProcessFlowAsync(processInstance, nextNode);
+                        }
+                    }
+                }
+                else
+                {
+                    // Process To Next Flow
+                    foreach (var nextFlow in await GetNextFlowAsync(flowNode.Id))
+                    {
+                        await ProcessFlowAsync(processInstance, nextFlow);
+                    }
+                    return true;
+                }
+
                 // process only if previous node is done
                 if (await IsPrevNodeDoneAsync(flowNode, processInstance.Id))
                 {
@@ -222,80 +275,20 @@ namespace BPMNET.Entity.Store
             return result;
         }
 
-        protected async Task<bool> ProcessToNextFlowAsync(ProcessInstanceEntity processInstance, FlowNodeEntity flowNode)
+        protected async Task ProcessToNextFlowAsync(ProcessInstanceEntity processInstance, FlowNodeEntity flowNode)
         {
-            bool result = true;
             foreach (var next in await GetNextFlowAsync(flowNode.Id))
             {
-                //Save Process Flow
+                //Save current process flow
                 await SaveProcessFlowAsync(processInstance.Id, flowNode.Id, next.Id);
 
-                FlowNodeEntity nextNode = null;
-                if (ProcessItemCheck.IsSubProcess(next.ItemType))
+                //Check all process flow has been done
+                if (await IsPrevNodeDoneAsync(next, processInstance.Id))
                 {
-                    var subProcessInstance = await StartProcessInstanceAsync(next.FlowNodeId, processInstance.BusinessKey, processInstance.Id);
-                }
-                else if (ProcessItemCheck.IsGateway(next.ItemType))
-                {
-
-                    // Process only if previous node is complete
-                    if (await IsPrevNodeDoneAsync(next, processInstance.Id))
-                    {
-                        if (ProcessItemCheck.IsExclusiveGateway(next.ItemType))
-                        {
-                            ExpressionContext context = new ExpressionContext();
-                            AddVariableCondition(context, await GetAllVariableAsync(processInstance.Id));
-
-                            // Exclusive gateway is a diversion point of a business process flow.
-                            // For a given instance of the process, there is only one of the paths can be taken.
-                            // If two possible paths will only execute one but not both.
-                            foreach (var sequence in await GetNextSequenceFlowAsync(next.Id))
-                            {
-                                // Set default node
-                                nextNode = await GetFlowAsync(sequence.SourceId);
-                                if (!string.IsNullOrWhiteSpace(sequence.ConditionExpression) && EvaluateCondition(context, sequence.ConditionExpression))                // parse condition expression
-                                {
-                                    break;
-                                }
-                            }
-                            if (nextNode == null) throw new ArgumentException("Next flow from flowNodeId: {0} is not found");
-                            await ProcessFlowAsync(processInstance, nextNode);
-                        }
-                        else if (ProcessItemCheck.IsInclusiveGateway(next.ItemType))
-                        {
-                            ExpressionContext context = new ExpressionContext();
-                            AddVariableCondition(context, await GetAllVariableAsync(processInstance.Id));
-
-                            // Inclusive gateway is also a division point of the business process. 
-                            // Unlike the exclusive gateway, inclusive gateway may trigger more than 1 out-going paths. 
-                            // Since inclusive gateway may trigger more than 1 out-going paths, the condition checking process will have a little bit different then the exclusive gateway. 
-                            foreach (var sequence in await GetNextSequenceFlowAsync(next.Id))
-                            {
-                                if (string.IsNullOrWhiteSpace(sequence.ConditionExpression) || EvaluateCondition(context, sequence.ConditionExpression))
-                                {
-                                    nextNode = await GetFlowAsync(sequence.SourceId);
-                                    await ProcessFlowAsync(processInstance, nextNode);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // Process To Next Flow
-                            foreach (var nextFlow in await GetNextFlowAsync(next.Id))
-                            {
-                                await ProcessFlowAsync(processInstance, nextFlow);
-                            }
-                            return true;
-                        }
-                    }
-
-                }
-                else
-                {
+                    //Process Next flow
                     await ProcessFlowAsync(processInstance, next);
                 }
             }
-            return result;
         }
 
         protected async Task<ProcessTaskEntity> CreateTaskAsync(ProcessInstanceEntity processInstance, FlowNodeEntity node)
@@ -426,11 +419,13 @@ namespace BPMNET.Entity.Store
             return await queryable.ToArrayAsync();
         }
 
-        protected async Task<ProcessTaskEntity[]> GetAllProcessTaskAsync(int processInstanceId) {
+        protected async Task<ProcessTaskEntity[]> GetAllProcessTaskAsync(int processInstanceId)
+        {
             return await processTaskStore.DbEntitySet.Where(t => t.ProcessInstanceId.Equals(processInstanceId)).ToArrayAsync();
         }
 
-        protected async Task CancelAllTaskAsync(ProcessInstanceEntity processInstance) {
+        protected async Task CancelAllTaskAsync(ProcessInstanceEntity processInstance)
+        {
             //get alltask
             foreach (var task in await GetAllProcessTaskAsync(processInstance.Id))
             {
@@ -442,7 +437,8 @@ namespace BPMNET.Entity.Store
             await SaveChangesAsync();
         }
 
-        protected async Task CancelAllSubProcessAsync(ProcessInstanceEntity processInstance) {
+        protected async Task CancelAllSubProcessAsync(ProcessInstanceEntity processInstance)
+        {
             //get subprocess
             foreach (var subProcess in await GetAllSubProcessAsync(processInstance.Id))
             {
@@ -554,6 +550,25 @@ namespace BPMNET.Entity.Store
                     throw ex;
                 }
             }
+        }
+
+        public async Task<ProcessInstanceEntity> SuspendInstanceAsync(int processInstanceId)
+        {
+            var processInstance = await GetProcessInstanceAsync(processInstanceId);
+            processInstance.IsSuspended = true;
+            processInstanceStore.Update(processInstance);
+            await SaveChangesAsync();
+            return processInstance;
+        }
+
+        public async Task<ProcessInstanceEntity> ActivateInstanceAsync(int processInstanceId)
+        {
+
+            var processInstance = await GetProcessInstanceAsync(processInstanceId);
+            processInstance.IsSuspended = false;
+            processInstanceStore.Update(processInstance);
+            await SaveChangesAsync();
+            return processInstance;
         }
 
         #endregion

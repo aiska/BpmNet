@@ -4,7 +4,7 @@ using System;
 
 namespace BPMNET.Engine.Manager
 {
-    public static class DeploymentManagerExtension
+    public static class DefinitionManagerExtension
     {
         public static TDeployment DeployBpmn<TKey, TProcessDefinitionStore, TDeployment>(this DefinitionManager<TKey, TProcessDefinitionStore, TDeployment> manager, string bpmnFile, string deploymentId, string tenantId)
             where TKey : IEquatable<TKey>

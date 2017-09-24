@@ -24,19 +24,6 @@ namespace BPMNET.Entity.Store
             DbEntitySet = context.Set<TEntity>();
         }
 
-        internal void Where()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual Task<TEntity> GetByIdAsync(object id)
-        {
-            return DbEntitySet.FindAsync(new object[]
-            {
-                id
-            });
-        }
-
         public void Create(TEntity entity)
         {
             if (entity is ITimeTrail)
@@ -47,6 +34,7 @@ namespace BPMNET.Entity.Store
         {
             DbEntitySet.Remove(entity);
         }
+
         public virtual void Update(TEntity entity)
         {
             if (entity != null)

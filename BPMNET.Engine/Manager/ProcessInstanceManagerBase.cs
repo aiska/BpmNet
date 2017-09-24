@@ -4,12 +4,10 @@ using System.Threading.Tasks;
 
 namespace BPMNET.Engine.Manager
 {
-    public abstract class ProcessInstanceManager<TKey, TProcessInstanceStore, TInstance, TInstanceTask, TProcessInstance, TFlowNode> : IDisposable
+    public abstract class ProcessInstanceManager<TKey, TProcessInstanceStore, TProcessInstance, TFlowNode> : IDisposable
         where TKey : IEquatable<TKey>
         where TProcessInstanceStore : class, IProcessInstanceStore<TKey, TProcessInstance, TFlowNode>
-        where TInstance : class, IInstance<TKey, TInstance, TInstanceTask>
-        where TInstanceTask : class, IInstanceTask<TKey>
-        where TProcessInstance : class, IProcessInstance<TKey>, new()
+        where TProcessInstance : class, IProcessInstance<TKey>
         where TFlowNode : class, IFlowNode<TKey>
     {
         #region Properties
@@ -21,9 +19,9 @@ namespace BPMNET.Engine.Manager
         #endregion
 
         #region Constructor
-        public ProcessInstanceManager(TProcessInstanceStore processInstanceStore)
+        public ProcessInstanceManager(TProcessInstanceStore store)
         {
-            Store = processInstanceStore;
+            Store = store;
         }
         #endregion
 
@@ -45,7 +43,7 @@ namespace BPMNET.Engine.Manager
         }
         #endregion
 
-        #region Sub Routine
+        #region Public Sub Routine
 
         public async Task<TProcessInstance[]> GetActiveByProcessNameAsync()
         {
@@ -62,25 +60,37 @@ namespace BPMNET.Engine.Manager
             return await Store.GetProcessInstanceByProcessNameAsync(processName);
         }
 
-        public abstract Task<TInstance> GetProcessInstanceAsync(TKey processInstanceId);
-
-        public abstract Task<TInstance> StartProcessInstanceAsync(string process, string businessKey);
-
-        public abstract Task<TInstance> StartProcessInstanceAsync(TKey processId, string businessKey);
-
-        public async Task<TProcessInstance> ActivateAsync(TKey processInstanceId) {
-            var processInstance = await Store.GetProcessInstanceAsync(processInstanceId);
-            processInstance.IsSuspended = false;
-            return processInstance;
+        public async Task<TProcessInstance> GetProcessInstanceAsync(TKey processInstanceId)
+        {
+            return await Store.GetProcessInstanceAsync(processInstanceId);
         }
 
-        public async Task CancelAsync(TKey processInstanceId, string reason)
+        public async Task<TProcessInstance> StartProcessInstanceAsync(string process, string businessKey)
+        {
+            return await Store.StartProcessInstanceAsync(process, businessKey);
+        }
+
+        public async Task<TProcessInstance> StartProcessInstanceAsync(TKey processDefinitionId, string businessKey)
+        {
+            return await Store.StartProcessInstanceAsync(processDefinitionId, businessKey);
+        }
+
+        public async Task<TProcessInstance> SuspendInstanceAsync(TKey processInstanceId)
+        {
+            return await SuspendInstanceAsync(processInstanceId);
+        }
+
+        public async Task<TProcessInstance> ActivateInstanceAsync(TKey processInstanceId)
+        {
+            return await ActivateInstanceAsync(processInstanceId);
+        }
+
+        public async Task CancelInstanceAsync(TKey processInstanceId, string reason)
         {
             await Store.CancelAsync(processInstanceId, reason);
         }
 
         #endregion
-
 
         //public async Task<ProcessTask> GetProcessTaskAsync(int processInstanceId, string taskName)
         //{

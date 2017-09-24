@@ -15,5 +15,7 @@ namespace BPMNET.Core
         Task<TProcessInstance> StartProcessInstanceAsync(TKey processId, string businessKey);
         Task<TProcessInstance> StartProcessInstanceAsync(string process, string businessKey);
         Task CancelAsync(TKey processInstanceId, string reason);
+        Task<TProcessInstance> SuspendInstanceAsync(TKey processInstanceId);
+        Task<TProcessInstance> ActivateInstanceAsync(TKey processInstanceId);
     }
 }

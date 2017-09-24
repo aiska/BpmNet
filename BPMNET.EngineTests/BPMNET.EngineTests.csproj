@@ -59,17 +59,28 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Manager\DefinitionManagerExtensionTests.cs" />
     <Compile Include="Manager\DefinitionManagerTests.cs" />
+    <Compile Include="Manager\Int\ProcessInstanceManagerTests.cs" />
+    <Compile Include="Manager\ProcessInstanceManagerExtensionTests.cs" />
     <Compile Include="Manager\ProcessInstanceManagerTests.cs" />
+    <Compile Include="Manager\ProcessInstanceManagerUserTest.cs" />
+    <Compile Include="Manager\ProcessTaskManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="User.cs" />
+    <Compile Include="Implement\User.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BPMNET.Bpmn\BPMNET.Bpmn.csproj">
+      <Project>{D88B5143-539F-4E3C-B539-4EBF092F6578}</Project>
+      <Name>BPMNET.Bpmn</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BPMNET.Core\BPMNET.Core.csproj">
       <Project>{83B646FE-D688-425F-AB1E-C9C0B21577CD}</Project>
       <Name>BPMNET.Core</Name>
