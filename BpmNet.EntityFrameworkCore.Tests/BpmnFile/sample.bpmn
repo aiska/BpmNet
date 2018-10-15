@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+    xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+    xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+    xmlns:di="http://www.omg.org/spec/DD/20100524/DI" 
+    id="Definitions_1r5zxji" 
+    targetNamespace="http://bpmn.io/schema/bpmn">
+    <bpmn:process id="Process_1" isExecutable="false">
+        <bpmn:startEvent id="StartEvent_1">
+            <bpmn:outgoing>SequenceFlow_1245h1u</bpmn:outgoing>
+        </bpmn:startEvent>
+        <bpmn:sequenceFlow id="SequenceFlow_0uj8p6b" sourceRef="ExclusiveGateway_09m50cm" targetRef="Task_055b8z8" />
+        <bpmn:sequenceFlow id="SequenceFlow_1245h1u" sourceRef="StartEvent_1" targetRef="ExclusiveGateway_09m50cm" />
+        <bpmn:userTask id="Task_055b8z8">
+            <bpmn:incoming>SequenceFlow_0uj8p6b</bpmn:incoming>
+            <bpmn:outgoing>SequenceFlow_0vupop6</bpmn:outgoing>
+        </bpmn:userTask>
+        <bpmn:sequenceFlow id="SequenceFlow_0f42cdm" sourceRef="ExclusiveGateway_09m50cm" targetRef="Task_1o4o1mj" />
+        <bpmn:serviceTask id="Task_1o4o1mj">
+            <bpmn:incoming>SequenceFlow_0f42cdm</bpmn:incoming>
+            <bpmn:outgoing>SequenceFlow_1ivrpqh</bpmn:outgoing>
+        </bpmn:serviceTask>
+        <bpmn:endEvent id="EndEvent_14sfbgj">
+            <bpmn:incoming>SequenceFlow_0lpjzcf</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="SequenceFlow_0vupop6" sourceRef="Task_055b8z8" targetRef="ExclusiveGateway_0o8mkb4" />
+        <bpmn:sequenceFlow id="SequenceFlow_1ivrpqh" sourceRef="Task_1o4o1mj" targetRef="ExclusiveGateway_0o8mkb4" />
+        <bpmn:sequenceFlow id="SequenceFlow_0lpjzcf" sourceRef="ExclusiveGateway_0o8mkb4" targetRef="EndEvent_14sfbgj" />
+        <bpmn:parallelGateway id="ExclusiveGateway_09m50cm">
+            <bpmn:incoming>SequenceFlow_1245h1u</bpmn:incoming>
+            <bpmn:outgoing>SequenceFlow_0uj8p6b</bpmn:outgoing>
+            <bpmn:outgoing>SequenceFlow_0f42cdm</bpmn:outgoing>
+        </bpmn:parallelGateway>
+        <bpmn:parallelGateway id="ExclusiveGateway_0o8mkb4">
+            <bpmn:incoming>SequenceFlow_0vupop6</bpmn:incoming>
+            <bpmn:incoming>SequenceFlow_1ivrpqh</bpmn:incoming>
+            <bpmn:outgoing>SequenceFlow_0lpjzcf</bpmn:outgoing>
+        </bpmn:parallelGateway>
+    </bpmn:process>
+</bpmn:definitions>

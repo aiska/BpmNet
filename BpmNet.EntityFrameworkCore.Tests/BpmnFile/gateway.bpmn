@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1hpbfea" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_Gateway" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_Gateway">
+      <bpmn:outgoing>SequenceFlow_1hlfom4</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1hlfom4" sourceRef="StartEvent_Gateway" targetRef="ExclusiveGateway_02vrl53" />
+    <bpmn:sequenceFlow id="SequenceFlow_1ccxh8j" sourceRef="ExclusiveGateway_02vrl53" targetRef="ExclusiveGateway_1to2swr" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_1j4h4j8">
+      <bpmn:incoming>SequenceFlow_1w9bkv8</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1ntja40</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_1w9bkv8" sourceRef="ExclusiveGateway_1to2swr" targetRef="ExclusiveGateway_1j4h4j8" />
+    <bpmn:sequenceFlow id="SequenceFlow_1ntja40" sourceRef="ExclusiveGateway_1j4h4j8" targetRef="ExclusiveGateway_0q8n5wp" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0xj8mk9">
+      <bpmn:incoming>SequenceFlow_0e2zl41</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1g7kk35</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_08membe</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0e2zl41" sourceRef="ExclusiveGateway_02vrl53" targetRef="ExclusiveGateway_0xj8mk9" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0jl78x7">
+      <bpmn:incoming>SequenceFlow_0958m9y</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0jjss0x</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1ll8myy</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0958m9y" sourceRef="ExclusiveGateway_02vrl53" targetRef="ExclusiveGateway_0jl78x7" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_13vm48f">
+      <bpmn:incoming>SequenceFlow_0jjss0x</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1i9btno</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0jjss0x" sourceRef="ExclusiveGateway_0jl78x7" targetRef="ExclusiveGateway_13vm48f" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0kslro0">
+      <bpmn:incoming>SequenceFlow_1ll8myy</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0mlsr29</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_1ll8myy" sourceRef="ExclusiveGateway_0jl78x7" targetRef="ExclusiveGateway_0kslro0" />
+    <bpmn:sequenceFlow id="SequenceFlow_1g7kk35" sourceRef="ExclusiveGateway_0xj8mk9" targetRef="ExclusiveGateway_1ve5nbr" />
+    <bpmn:sequenceFlow id="SequenceFlow_08membe" sourceRef="ExclusiveGateway_0xj8mk9" targetRef="ExclusiveGateway_10hm1s9" />
+    <bpmn:parallelGateway id="ExclusiveGateway_02vrl53">
+      <bpmn:incoming>SequenceFlow_1hlfom4</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1ccxh8j</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0e2zl41</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0958m9y</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:inclusiveGateway id="ExclusiveGateway_1to2swr">
+      <bpmn:incoming>SequenceFlow_1ccxh8j</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1w9bkv8</bpmn:outgoing>
+    </bpmn:inclusiveGateway>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_1ve5nbr">
+      <bpmn:incoming>SequenceFlow_1g7kk35</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1yte6dh</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:inclusiveGateway id="ExclusiveGateway_10hm1s9">
+      <bpmn:incoming>SequenceFlow_08membe</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0hx99wt</bpmn:outgoing>
+    </bpmn:inclusiveGateway>
+    <bpmn:parallelGateway id="ExclusiveGateway_0q8n5wp">
+      <bpmn:incoming>SequenceFlow_1ntja40</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1qplsto</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:endEvent id="EndEvent_10pakty">
+      <bpmn:incoming>SequenceFlow_0mlsr29</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0hx99wt</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1yte6dh</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1qplsto</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1i9btno</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0mlsr29" sourceRef="ExclusiveGateway_0kslro0" targetRef="EndEvent_10pakty" />
+    <bpmn:sequenceFlow id="SequenceFlow_0hx99wt" sourceRef="ExclusiveGateway_10hm1s9" targetRef="EndEvent_10pakty" />
+    <bpmn:sequenceFlow id="SequenceFlow_1yte6dh" sourceRef="ExclusiveGateway_1ve5nbr" targetRef="EndEvent_10pakty" />
+    <bpmn:sequenceFlow id="SequenceFlow_1qplsto" sourceRef="ExclusiveGateway_0q8n5wp" targetRef="EndEvent_10pakty" />
+    <bpmn:sequenceFlow id="SequenceFlow_1i9btno" sourceRef="ExclusiveGateway_13vm48f" targetRef="EndEvent_10pakty" />
+  </bpmn:process>
+</bpmn:definitions>

@@ -1,146 +1,42 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{83B646FE-D688-425F-AB1E-C9C0B21577CD}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BPMNET.Core</RootNamespace>
-    <AssemblyName>BPMNET.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup />
-  <ItemGroup>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BpmEventType.cs" />
-    <Compile Include="BpmResult.cs" />
-    <Compile Include="Check.cs" />
-    <Compile Include="EKeyType.cs" />
-    <Compile Include="EDelegationState.cs" />
-    <Compile Include="EIdentityLinkType.cs" />
-    <Compile Include="Entity\IProcessVariable.cs" />
-    <Compile Include="Entity\ProcessFlowEntity.cs" />
-    <Compile Include="EProcessItemType.cs" />
-    <Compile Include="ESuspensionState.cs" />
-    <Compile Include="Entity\IActivity.cs" />
-    <Compile Include="Entity\IApproval.cs" />
-    <Compile Include="Entity\IAttachment.cs" />
-    <Compile Include="Entity\IAuditTrail.cs" />
-    <Compile Include="IBpmEvent.cs" />
-    <Compile Include="IBpmnParser.cs" />
-    <Compile Include="ICacheStore.cs" />
-    <Compile Include="IComment.cs" />
-    <Compile Include="IDataObject.cs" />
-    <Compile Include="Entity\IDefinition.cs" />
-    <Compile Include="Entity\IDefinitionVariable.cs" />
-    <Compile Include="Entity\IDeployment.cs" />
-    <Compile Include="IDeploymentManager.cs" />
-    <Compile Include="IDeploymentStore.cs" />
-    <Compile Include="IDeploymentValidator.cs" />
-    <Compile Include="IFindById.cs" />
-    <Compile Include="IFlowNode.cs" />
-    <Compile Include="Runtime\IGroup.cs" />
-    <Compile Include="IHasRevision.cs" />
-    <Compile Include="IHistoricActivityInstance.cs" />
-    <Compile Include="IHistoricData .cs" />
-    <Compile Include="IHistoricDetail.cs" />
-    <Compile Include="IIdentityLink.cs" />
-    <Compile Include="IModel.cs" />
-    <Compile Include="IProcess.cs" />
-    <Compile Include="IProcessDefinitionKey.cs" />
-    <Compile Include="Runtime\IInstance.cs" />
-    <Compile Include="Runtime\IInstanceTask.cs" />
-    <Compile Include="Runtime\ITenant.cs" />
-    <Compile Include="Runtime\IUser.cs" />
-    <Compile Include="Store\IProcessDefinitionStore.cs" />
-    <Compile Include="IProcessDefinitionValidator.cs" />
-    <Compile Include="IProcessEvent.cs" />
-    <Compile Include="IProcessFlowStore.cs" />
-    <Compile Include="IProcessInstance.cs" />
-    <Compile Include="IProcessInstanceKey.cs" />
-    <Compile Include="IProcessInstanceManager.cs" />
-    <Compile Include="IProcessInstanceValidator.cs" />
-    <Compile Include="Entity\IDefinitionItem.cs" />
-    <Compile Include="IProcessTask.cs" />
-    <Compile Include="IProcessTaskKey.cs" />
-    <Compile Include="IProcessTaskManager.cs" />
-    <Compile Include="IProcessTaskStore.cs" />
-    <Compile Include="IProcessTaskValidator.cs" />
-    <Compile Include="IProcessValidator.cs" />
-    <Compile Include="IQueryableProcessInstanceStore.cs" />
-    <Compile Include="IQueryableStore.cs" />
-    <Compile Include="Runtime\IRole.cs" />
-    <Compile Include="IRuntimeProvider.cs" />
-    <Compile Include="IRuntimeStore.cs" />
-    <Compile Include="IRuntimeValidator.cs" />
-    <Compile Include="ISequenceFlow.cs" />
-    <Compile Include="IStore.cs" />
-    <Compile Include="ITaskService.cs" />
-    <Compile Include="ITimeTrail.cs" />
-    <Compile Include="IUserTrail.cs" />
-    <Compile Include="IValidator.cs" />
-    <Compile Include="IVariableInstance.cs" />
-    <Compile Include="ProcessInstanceStatus.cs" />
-    <Compile Include="ProcessItemCheck.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Store\IProcessInstanceStore.cs" />
-    <Compile Include="TaskStatus.cs" />
-    <Compile Include="TaskType.cs" />
-    <Compile Include="Variable\EStoreType.cs" />
-    <Compile Include="Variable\IVariable.cs" />
-    <Compile Include="Variable\VariableParser.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BPMNET.Bpmn\BPMNET.Bpmn.csproj">
-      <Project>{d88b5143-539f-4e3c-b539-4ebf092f6578}</Project>
-      <Name>BPMNET.Bpmn</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <DebugType>Full</DebugType>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <LangVersion>7.1</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <LangVersion>7.1</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="Resolvers\BpmNetDefinitionStoreResolver.cs" />
+        <Compile Remove="Resolvers\BpmNetProcessResolver.cs" />
+        <Compile Remove="Resolvers\BpmNetProcessStoreResolver.cs" />
+        <Compile Remove="Resolvers\BpmNetServiceResolver.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove=".gitignore" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
+        <PackageReference Include="Microsoft.XmlSerializer.Generator" Version="2.0.0" />
+        <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <DotNetCliToolReference Include="Microsoft.XmlSerializer.Generator" Version="2.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\BpmNet.Abstractions\BpmNet.Abstractions.csproj" />
+    </ItemGroup>
+
 </Project>

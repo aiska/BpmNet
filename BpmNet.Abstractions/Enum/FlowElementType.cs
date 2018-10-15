@@ -1,0 +1,38 @@
+﻿namespace BpmNet
+{
+    public enum FlowElementType
+    {
+        SequenceFlow,
+        ParallelGateway,
+        ExclusiveGateway,
+        InclusiveGateway,
+        ComplexGateway,
+        EventBasedGateway,
+        UserTask,
+        ServiceTask,
+        BusinessRuleTask,
+        ManualTask,
+        ReceiveTask,
+        ScriptTask,
+        SendTask,
+        Task,
+        StartEvent,
+        EndEvent,
+        IntermediateCatchEvent,
+        ImplicitThrowEvent,
+        BoundaryEvent,
+        IntermediateThrowEvent,
+        Event,
+        AdHocSubProcess,
+        Transaction,
+        SubProcess,
+        CallActivity,
+        CallChoreography,
+        ChoreographyTask,
+        SubChoreography,
+        DataObject,
+        DataObjectReference,
+        DataStoreReference,
+        Flow
+    }
+}
