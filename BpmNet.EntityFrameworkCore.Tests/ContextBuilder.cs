@@ -5,12 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 
 namespace BpmNet.EntityFrameworkCore.Tests
 {
 
+    [ExcludeFromCodeCoverage]
     public static class TestBuilder
     {
         public static readonly string PATH_SAMPLE = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"BpmnFile\sample.bpmn");
@@ -42,11 +44,14 @@ namespace BpmNet.EntityFrameworkCore.Tests
             return services;
         }
     }
+
+    [ExcludeFromCodeCoverage]
     public class CustomContext : DbContext
     {
         public CustomContext(DbContextOptions options) : base(options) { }
     }
 
+    [ExcludeFromCodeCoverage]
     public class CustomDbContext : DbContext
     {
 
@@ -62,7 +67,11 @@ namespace BpmNet.EntityFrameworkCore.Tests
             builder.ApplyConfiguration(new BpmNetProcessConfiguration());
         }
     }
+
+    [ExcludeFromCodeCoverage]
     public class CustomDefinition : BpmNetDefinition { }
+
+    [ExcludeFromCodeCoverage]
     public class CustomProcessInstance : IProcessInstance<CustomInstanceFlow>
     {
         public Guid Id { get; set; }
@@ -72,6 +81,10 @@ namespace BpmNet.EntityFrameworkCore.Tests
         public InstanceStatus Status { get; set; }
         public ICollection<CustomInstanceFlow> Flows { get; set; }
     }
+
+    [ExcludeFromCodeCoverage]
     public class CustomInstanceFlow : BpmNetInstanceFlow { }
+
+    [ExcludeFromCodeCoverage]
     public class CustomHistory : BpmNetHistory { }
 }

@@ -1,8 +1,10 @@
-﻿using System.Xml;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml;
 using Xunit;
 
 namespace BpmNet.Bpmn.Tests.Model
 {
+    [ExcludeFromCodeCoverage]
     public class BPMNPlaneTests
     {
         [Fact]

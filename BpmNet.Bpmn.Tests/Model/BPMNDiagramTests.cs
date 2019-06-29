@@ -1,7 +1,9 @@
-﻿using Xunit;
+﻿using System.Diagnostics.CodeAnalysis;
+using Xunit;
 
 namespace BpmNet.Bpmn.Tests.Model
 {
+    [ExcludeFromCodeCoverage]
     public class BPMNDiagramTests
     {
         [Fact]

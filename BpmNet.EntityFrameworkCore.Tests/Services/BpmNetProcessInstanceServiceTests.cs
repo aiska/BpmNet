@@ -3,6 +3,7 @@ using BpmNet.EntityFrameworkCore.Tests.Orders;
 using BpmNet.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -11,6 +12,7 @@ using Xunit.Abstractions;
 namespace BpmNet.EntityFrameworkCore.Tests.Services
 {
     [Order(2)]
+    [ExcludeFromCodeCoverage]
     public class BpmNetProcessInstanceServiceTests
     {
         private readonly ITestOutputHelper _output;

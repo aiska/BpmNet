@@ -2,10 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Xunit;
 
 namespace BpmNet.EntityFrameworkCore.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class BpmNetEntityFrameworkCoreBuilderTests
     {
         [Fact]

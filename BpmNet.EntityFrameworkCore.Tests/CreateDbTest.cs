@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BpmNet.EntityFrameworkCore.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class CreateDbTest
     {
         //[Fact]

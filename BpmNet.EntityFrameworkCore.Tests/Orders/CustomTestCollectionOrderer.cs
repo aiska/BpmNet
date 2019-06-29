@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Xunit;
@@ -12,6 +13,7 @@ namespace BpmNet.EntityFrameworkCore.Tests.Orders
     /// <summary>
     /// Used by CustomOrderer
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class OrderAttribute : Attribute
     {
         public int I { get; }
@@ -25,6 +27,7 @@ namespace BpmNet.EntityFrameworkCore.Tests.Orders
     /// <summary>
     /// Custom xUnit test collection orderer that uses the OrderAttribute
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class CustomTestCollectionOrderer : ITestCollectionOrderer
     {
         public const string TypeName = "xUnitCustom.CustomTestCollectionOrderer";
@@ -63,6 +66,7 @@ namespace BpmNet.EntityFrameworkCore.Tests.Orders
     /// <summary>
     /// Custom xUnit test case orderer that uses the OrderAttribute
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class CustomTestCaseOrderer : ITestCaseOrderer
     {
         public const string TypeName = "xUnitCustom.CustomTestCaseOrderer";

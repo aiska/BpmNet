@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Xunit;
 
 namespace BpmNet.Abstractions.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class BpmNetExceptionTests
     {
         [Fact]

@@ -1,6 +1,7 @@
 ﻿using BpmNet.EntityFrameworkCore.Tests.Orders;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -8,6 +9,7 @@ using Xunit;
 namespace BpmNet.EntityFrameworkCore.Tests
 {
     [Order(1)]
+    [ExcludeFromCodeCoverage]
     public class BpmNetDefinitionServiceTests
     {
 

@@ -4,11 +4,13 @@ using BpmNet.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Xunit;
 
 namespace BpmNet.Core.Tests.Resolvers
 {
+    [ExcludeFromCodeCoverage]
     public class BpmNetStoreResolverTests
     {
         #region Definitions
@@ -47,6 +49,7 @@ namespace BpmNet.Core.Tests.Resolvers
         }
         #endregion
 
+        [ExcludeFromCodeCoverage]
         public class CustomDefinition : IBpmNetDefinition
         {
             public string Id { get; set; }

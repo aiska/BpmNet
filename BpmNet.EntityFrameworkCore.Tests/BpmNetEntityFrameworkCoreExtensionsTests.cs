@@ -11,10 +11,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Moq;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Xunit;
 
 namespace BpmNet.EntityFrameworkCore.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class BpmNetEntityFrameworkCoreExtensionsTests
     {
         [Fact]

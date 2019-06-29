@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Xunit;
 
 namespace BpmNet.Abstractions.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class BpmNetExtensionsTests
     {
         [Fact]

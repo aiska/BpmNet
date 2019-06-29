@@ -7,11 +7,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Xunit;
 
 namespace BpmNet.Core.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class BpmNetCoreExtensionsTests
     {
         [Fact]

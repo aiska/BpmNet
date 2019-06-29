@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Xunit;
 
 namespace BpmNet.Core.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class BpmNetCoreHelpersTests
     {
         [Fact]

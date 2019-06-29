@@ -9,11 +9,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Moq;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Xunit;
 
 namespace BpmNet.EntityFrameworkCore.Tests.Resolvers
 {
+    [ExcludeFromCodeCoverage]
     public class BpmNetDefinitionStoreResolverTests
     {
         #region Definition

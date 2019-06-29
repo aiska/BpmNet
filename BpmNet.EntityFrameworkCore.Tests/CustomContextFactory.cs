@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BpmNet.EntityFrameworkCore.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class CustomContextFactory : IDesignTimeDbContextFactory<CustomDbContext>
     {
         public CustomDbContext CreateDbContext(string[] args)
