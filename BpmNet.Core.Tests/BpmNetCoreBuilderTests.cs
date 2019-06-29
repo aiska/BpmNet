@@ -1,6 +1,4 @@
-﻿using BpmNet.Cache;
-using BpmNet.Core.Model;
-using BpmNet.Core.Services;
+﻿using BpmNet.Core.Services;
 using BpmNet.Model;
 using BpmNet.Resolvers;
 using BpmNet.Stores;

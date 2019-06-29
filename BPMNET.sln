@@ -25,9 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BpmNet.EntityFrameworkCore"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BpmNet.EntityFrameworkCore.Models", "BpmNet.EntityFrameworkCore.Models\BpmNet.EntityFrameworkCore.Models.csproj", "{226F4385-9654-4929-9EA6-0DC4D473CE25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BpmNet.Api.Tests", "BpmNet.Api.Tests\BpmNet.Api.Tests.csproj", "{5CFE619F-BF0D-4D88-9C75-68DF3784895B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BpmNet.Api.Tests", "BpmNet.Api.Tests\BpmNet.Api.Tests.csproj", "{5CFE619F-BF0D-4D88-9C75-68DF3784895B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BpmNet.Bpmn", "BpmNet.Bpmn\BpmNet.Bpmn.csproj", "{DD92B176-3E69-493C-8014-77826B12B05D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BpmNet.Bpmn", "BpmNet.Bpmn\BpmNet.Bpmn.csproj", "{DD92B176-3E69-493C-8014-77826B12B05D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BpmNet.Bpmn.Tests", "BpmNet.Bpmn.Tests\BpmNet.Bpmn.Tests.csproj", "{21093FE0-FAEA-4EA5-B36B-33E2E0572082}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{DD92B176-3E69-493C-8014-77826B12B05D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD92B176-3E69-493C-8014-77826B12B05D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD92B176-3E69-493C-8014-77826B12B05D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21093FE0-FAEA-4EA5-B36B-33E2E0572082}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21093FE0-FAEA-4EA5-B36B-33E2E0572082}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21093FE0-FAEA-4EA5-B36B-33E2E0572082}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21093FE0-FAEA-4EA5-B36B-33E2E0572082}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +96,7 @@ Global
 		{226F4385-9654-4929-9EA6-0DC4D473CE25} = {383A194E-A84B-4854-8FC9-B7E19A4F3268}
 		{5CFE619F-BF0D-4D88-9C75-68DF3784895B} = {6A0B96C5-B9DA-4D59-B877-A33210B4E05C}
 		{DD92B176-3E69-493C-8014-77826B12B05D} = {383A194E-A84B-4854-8FC9-B7E19A4F3268}
+		{21093FE0-FAEA-4EA5-B36B-33E2E0572082} = {4AEEE22E-8DC9-4BF7-BF71-DDD9371D0154}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {656D3108-E893-4288-98AF-4444E2F5C195}

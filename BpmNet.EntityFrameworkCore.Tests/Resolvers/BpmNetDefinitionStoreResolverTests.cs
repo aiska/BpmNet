@@ -1,5 +1,4 @@
-﻿using BpmNet.Core.Model;
-using BpmNet.EntityFrameworkCore.Models;
+﻿using BpmNet.EntityFrameworkCore.Models;
 using BpmNet.EntityFrameworkCore.Resolvers;
 using BpmNet.EntityFrameworkCore.Stores;
 using BpmNet.Model;

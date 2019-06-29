@@ -1,5 +1,4 @@
-﻿using BpmNet.Core.Model;
-using BpmNet.Core.Resolvers;
+﻿using BpmNet.Core.Resolvers;
 using BpmNet.Model;
 using BpmNet.Stores;
 using Microsoft.Extensions.DependencyInjection;

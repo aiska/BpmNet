@@ -4,3 +4,5 @@
 *.csproj.user
 *.vspx
 /Documentation/
+/BpmNet.Bpmn.Tests/obj
+/BpmNet.Bpmn.Tests/bin/Debug/netcoreapp2.1

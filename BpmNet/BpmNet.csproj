@@ -21,8 +21,4 @@
         <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.1.2" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
     </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\BpmNet.Abstractions\BpmNet.Abstractions.csproj" />
-    </ItemGroup>
 </Project>

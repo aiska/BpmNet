@@ -1,5 +1,4 @@
-﻿using BpmNet.Core.Model;
-using BpmNet.EntityFrameworkCore.Configurations;
+﻿using BpmNet.EntityFrameworkCore.Configurations;
 using BpmNet.EntityFrameworkCore.Models;
 using BpmNet.Model;
 using Microsoft.EntityFrameworkCore;
@@ -35,9 +34,9 @@ namespace BpmNet.EntityFrameworkCore.Tests
             services.AddDbContext<CustomContext>(options =>
             {
                 options.UseBpmNet();
-                //options.UseLazyLoadingProxies();
-                //options.UseInMemoryDatabase(Guid.NewGuid().ToString());
-                options.UseSqlServer("Data Source=(local);Initial Catalog=BPMNET_NEW;Integrated Security=True");
+                options.UseLazyLoadingProxies();
+                options.UseInMemoryDatabase(Guid.NewGuid().ToString());
+                //options.UseSqlServer("Data Source=(local);Initial Catalog=BPMNET_NEW;Integrated Security=True");
             });
 
             return services;

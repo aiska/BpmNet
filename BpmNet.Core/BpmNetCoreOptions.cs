@@ -17,6 +17,7 @@ namespace BpmNet.Core
         public Type DefaultProcessInstanceFlowType { get; set; }
         
         public Type DefaultHistoryFlowType { get; set; }
+
         public double CacheTime { get; set; } = 60000;
     }
 }

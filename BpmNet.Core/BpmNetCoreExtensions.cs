@@ -2,7 +2,6 @@
 using BpmNet.Abstractions.Flow;
 using BpmNet.Core;
 using BpmNet.Core.FlowService;
-using BpmNet.Core.Model;
 using BpmNet.Core.Resolvers;
 using BpmNet.Core.Services;
 using BpmNet.Resolvers;
