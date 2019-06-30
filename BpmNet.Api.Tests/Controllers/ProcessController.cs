@@ -7,7 +7,7 @@ namespace BpmNet.Api.Tests.Controllers
     [ApiController]
     public class ProcessController : ControllerBase
     {
-        private readonly IBpmNetProcessService _processService;
+        private readonly IBpmNetProcessInstanceService _processService;
 
     }
 }

@@ -161,7 +161,7 @@ namespace BpmNet.EntityFrameworkCore.Stores
                     IsExecutable = item.IsExecutable,
                     IsClosed = item.IsClosed
                 };
-                Context.Add(process);
+                Processes.Add(process);
             }
 
             try

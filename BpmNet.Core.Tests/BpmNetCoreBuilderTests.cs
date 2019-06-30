@@ -3,6 +3,7 @@ using BpmNet.Model;
 using BpmNet.Resolvers;
 using BpmNet.Serializer;
 using BpmNet.Stores;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -101,6 +102,7 @@ namespace BpmNet.Core.Tests
             // Arrange
             var services = CreateServices();
             var builder = CreateBuilder(services);
+            services.AddMemoryCache();
 
             // Act
             builder.ReplaceDefinitionService<ClosedGenericDefinitionService>();
@@ -482,14 +484,16 @@ namespace BpmNet.Core.Tests
             where TDefinition : class, IBpmNetDefinition, new()
             where TProcess : class, IBpmNetProcess
         {
-            public OpenGenericDefinitionService(IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<TDefinition, TProcess>> logger) : base(storeResolver, serializer, logger)
+            public OpenGenericDefinitionService(IMemoryCache cache, IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<TDefinition, TProcess>> logger)
+                : base(cache, storeResolver, serializer, logger)
             {
             }
         }
 
         private class ClosedGenericDefinitionService : BpmNetDefinitionService<CustomDefinition, CustomProcess>
         {
-            public ClosedGenericDefinitionService(IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<CustomDefinition, CustomProcess>> logger) : base(storeResolver, serializer, logger)
+            public ClosedGenericDefinitionService(IMemoryCache cache, IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<CustomDefinition, CustomProcess>> logger)
+                : base(cache, storeResolver, serializer, logger)
             {
             }
         }
@@ -500,7 +504,8 @@ namespace BpmNet.Core.Tests
             where TProcess : class, IBpmNetProcess
             where THistory : class, IBpmNetHistory
         {
-            public OtherGenericDefinitionService(IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<TDefinition, TProcess>> logger) : base(storeResolver, serializer, logger)
+            public OtherGenericDefinitionService(IMemoryCache cache, IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<TDefinition, TProcess>> logger)
+                : base(cache, storeResolver, serializer, logger)
             {
             }
         }

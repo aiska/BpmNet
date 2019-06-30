@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BpmNet.Services
 {
-    public interface IBpmNetProcessService
+    public interface IBpmNetProcessInstanceService
     {
         Task<ImmutableArray<TResult>> ListProcessAsync<TResult>(Func<IQueryable<object>, IQueryable<TResult>> query, CancellationToken cancellationToken);
         Task<ImmutableArray<TResult>> ListProcessInstanceAsync<TResult>(Func<IQueryable<object>, IQueryable<TResult>> query, CancellationToken cancellationToken);

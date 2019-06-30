@@ -200,17 +200,6 @@ namespace BpmNet.EntityFrameworkCore.Stores
             return GetXmlAsyncCompiled(Context, processId);
         }
 
-        public Task<BpmnDefinitions> GetDefinitionAsync(string definitionId, CancellationToken cancellationToken)
-        {
-            return _cache.GetOrCreateAsync(string.Concat(DefinitionPrefix, definitionId), def =>
-            {
-                return FindByIdAsync(definitionId, cancellationToken).ContinueWith(t =>
-                {
-                    return SerializerService.DeserializeFromStringAsync(t.Result.Xml, cancellationToken);
-                }).Unwrap();
-            });
-        }
-
         public Task SaveDefinitionAsync(BpmnDefinitions bpmn, string content, bool replace, CancellationToken cancellationToken)
         {
             if (bpmn == null)

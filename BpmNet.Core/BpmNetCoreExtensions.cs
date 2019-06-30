@@ -109,7 +109,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         .ToString());
                 }
 
-                return (IBpmNetProcessService)provider.GetRequiredService(
+                return (IBpmNetProcessInstanceService)provider.GetRequiredService(
                     typeof(ProcessFlowService<,,,>).MakeGenericType(
                         options.DefaultDefinitionType,
                         options.DefaultProcessType,

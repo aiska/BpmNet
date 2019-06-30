@@ -249,11 +249,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentException("The specified type is invalid.", nameof(type));
             }
 
-            // Note: service can be either open generics (e.g BpmNetDefinitionService<>)
+            // Note: service can be either open generics (e.g BpmNetDefinitionService<,>)
             // or closed generics (e.g BpmNetDefinitionService<BpmNetDefinition>).
             if (type.IsGenericTypeDefinition)
             {
-                if (type.GetGenericArguments().Length != 1)
+                if (type.GetGenericArguments().Length != 2)
                 {
                     throw new ArgumentException("The specified type is invalid.", nameof(type));
                 }
@@ -265,11 +265,11 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 object ResolveService(IServiceProvider provider)
                     => provider.GetRequiredService(typeof(BpmNetDefinitionService<,>)
-                        .MakeGenericType(root.GenericTypeArguments[0]));
+                        .MakeGenericType(root.GenericTypeArguments[0], root.GenericTypeArguments[1]));
 
                 Services.Replace(new ServiceDescriptor(type, ResolveService, lifetime));
                 Services.Replace(new ServiceDescriptor(typeof(BpmNetDefinitionService<,>)
-                    .MakeGenericType(root.GenericTypeArguments[0]), type, lifetime));
+                    .MakeGenericType(root.GenericTypeArguments[0], root.GenericTypeArguments[1]), type, lifetime));
             }
 
             return this;

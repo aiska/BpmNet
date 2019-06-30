@@ -64,7 +64,7 @@ namespace BpmNet.Core.Tests
             builder.AddCore(configuration);
 
             // Assert
-            Assert.Contains(services, service => service.ServiceType == typeof(IBpmNetProcessService));
+            Assert.Contains(services, service => service.ServiceType == typeof(IBpmNetProcessInstanceService));
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace BpmNet.Core.Tests
             builder.AddCore();
             var provider = services.BuildServiceProvider();
 
-            var exception = Assert.Throws<InvalidOperationException>(() => provider.GetService(typeof(IBpmNetProcessService)));
+            var exception = Assert.Throws<InvalidOperationException>(() => provider.GetService(typeof(IBpmNetProcessInstanceService)));
 
             // Assert
             Assert.Equal(new StringBuilder()
@@ -102,7 +102,7 @@ namespace BpmNet.Core.Tests
             builder.AddCore();
             var provider = services.BuildServiceProvider();
 
-            var exception = Assert.Throws<InvalidOperationException>(() => provider.GetService(typeof(IBpmNetProcessService)));
+            var exception = Assert.Throws<InvalidOperationException>(() => provider.GetService(typeof(IBpmNetProcessInstanceService)));
 
             // Assert
             Assert.Equal(new StringBuilder()
@@ -175,7 +175,7 @@ namespace BpmNet.Core.Tests
         }
 
         [Theory]
-        [InlineData(typeof(IBpmNetProcessService))]
+        [InlineData(typeof(IBpmNetProcessInstanceService))]
         
         public void AddCore_RegistersUntypedProxies(Type type)
         {

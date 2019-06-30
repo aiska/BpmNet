@@ -30,21 +30,10 @@ namespace BpmNet.Core.Services
         {
             return Task.Run(() =>
             {
-                lock (locker)
-                {
-                    stream.Position = 0;
-                    var serializer = new XmlSerializer(typeof(BpmnDefinitions));
-                    return (BpmnDefinitions)serializer.Deserialize(stream);
-                }
+                stream.Position = 0;
+                var serializer = new XmlSerializer(typeof(BpmnDefinitions));
+                return (BpmnDefinitions)serializer.Deserialize(stream);
             }, cancellationToken);
-        }
-
-        public Task<BpmnDefinitions> DeserializeBpmnFileAsync(string fileName, CancellationToken cancellationToken)
-        {
-            using (var stream = File.OpenRead(fileName))
-            {
-                return DeserializeBpmnStreamAsync(stream, cancellationToken);
-            }
         }
 
         public Task<string> DeserializeStreamAsync(Stream stream, CancellationToken cancellationToken)
@@ -56,6 +45,15 @@ namespace BpmNet.Core.Services
                 return reader.ReadToEndAsync();
             }
         }
+
+        public async Task<BpmnDefinitions> DeserializeBpmnFileAsync(string fileName, CancellationToken cancellationToken)
+        {
+            using (var stream = File.OpenRead(fileName))
+            {
+                return await DeserializeBpmnStreamAsync(stream, cancellationToken);
+            }
+        }
+
 
         public Task<Stream> SerializeAsync(string xml, CancellationToken cancellationToken)
         {

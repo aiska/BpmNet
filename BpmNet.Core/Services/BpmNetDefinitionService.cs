@@ -3,6 +3,7 @@ using BpmNet.Model;
 using BpmNet.Resolvers;
 using BpmNet.Serializer;
 using BpmNet.Stores;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
@@ -15,6 +16,7 @@ namespace BpmNet.Core.Services
         where TDefinition : class, IBpmNetDefinition, new()
         where TProcess : class, IBpmNetProcess
     {
+        private readonly IMemoryCache _cache;
 
         private readonly IBpmNetDefinitionStore<TDefinition> _definitionStore;
         private readonly IBpmNetProcessStore<TProcess> _processStore;
@@ -23,10 +25,12 @@ namespace BpmNet.Core.Services
         protected ILogger Logger { get; }
 
         public BpmNetDefinitionService(
+            IMemoryCache cache,
             IBpmNetStoreResolver storeResolver,
             IBpmNetSerializer serializer,
             ILogger<BpmNetDefinitionService<TDefinition, TProcess>> logger)
         {
+            _cache = cache;
             _definitionStore = storeResolver.GetDefinitionStore<TDefinition>();
             _processStore = storeResolver.GetProcessStore<TProcess>();
             _serializer = serializer;
@@ -39,29 +43,33 @@ namespace BpmNet.Core.Services
             return DeployAsync(stream, false, cancellationToken);
         } 
 
-        public Task<BpmnDefinitions> DeployAsync(Stream stream, bool replace, CancellationToken cancellationToken)
+        public async Task<BpmnDefinitions> DeployAsync(Stream stream, bool replace, CancellationToken cancellationToken)
         {
             if (stream == null)
             {
                 throw new ArgumentNullException(nameof(stream));
             }
 
+            BpmnDefinitions bpmn = null;
+
             // Deserialize to BpmnDefinitions
-            var bpmnTask = _serializer.DeserializeBpmnStreamAsync(stream, cancellationToken);
-            var contentTask = _serializer.DeserializeStreamAsync(stream, cancellationToken);
+            using (MemoryStream bpmnStream = new MemoryStream())
+            {
+                stream.CopyTo(bpmnStream);
+                bpmn = await _serializer.DeserializeBpmnStreamAsync(bpmnStream, cancellationToken);
+            }
 
-            Task.WaitAll(bpmnTask, contentTask);
+            var content = await _serializer.DeserializeStreamAsync(stream, cancellationToken);
 
-            var definitionTask = _definitionStore.SaveDefinitionAsync(bpmnTask.Result, contentTask.Result, replace, cancellationToken);
+            await _definitionStore.SaveDefinitionAsync(bpmn, content, replace, cancellationToken);
 
             // Save Process.
-            var process = _processStore.SaveProcessAsync(bpmnTask.Result, replace, cancellationToken);
+            await _processStore.SaveProcessAsync(bpmn, replace, cancellationToken);
 
-            // Wait Task
-            Task.WaitAll(definitionTask, process);
+            // Store bpmn to Memory cache
+            _cache.Set(string.Concat(Cache.Prefix.BpmnDefinition, bpmn.Id), bpmn);
 
-            return bpmnTask;
-
+            return bpmn;
         }
 
         public async Task<BpmnDefinitions> DeployAsync(string filePath, bool replace, CancellationToken cancellationToken)
@@ -84,8 +92,13 @@ namespace BpmNet.Core.Services
 
         public Task<BpmnDefinitions> GetDefinitionAsync(string definitionId, CancellationToken cancellationToken)
         {
-            return _definitionStore.GetDefinitionAsync(definitionId, cancellationToken);
+            return _cache.GetOrCreateAsync(string.Concat(Cache.Prefix.BpmnDefinition, definitionId), def =>
+            {
+                return _definitionStore.FindByIdAsync(definitionId, cancellationToken).ContinueWith(t =>
+                {
+                    return SerializerService.DeserializeFromStringAsync(t.Result.Xml, cancellationToken);
+                }).Unwrap();
+            });
         }
-
     }
 }

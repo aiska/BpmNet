@@ -16,21 +16,19 @@ using System.Threading.Tasks;
 namespace BpmNet.Core
 {
     public class ProcessFlowService<TDefinition, TProcess, TInstance, TInstanceFlow>
-        : IBpmNetProcessService
+        : IBpmNetProcessInstanceService
         where TDefinition : class, IBpmNetDefinition
         where TProcess : class, IBpmNetProcess
         where TInstance : class, IProcessInstance<TInstanceFlow>, new()
         where TInstanceFlow : class, IBpmNetInstanceFlow, new()
     {
 
-        private const string BpmnProcessPrefix = "BpmnProc_";
-
         private readonly IMemoryCache _cache;
 
         private readonly IBpmNetProcessInstanceStore<TInstance, TInstanceFlow> _instanceStore;
-        private readonly IBpmNetDefinitionStore<TDefinition> _definitionStore;
         private readonly IBpmNetProcessStore<TProcess> _processStore;
 
+        private readonly IBpmNetDefinitionService _definitionService;
         private readonly IBpmNetSequenceFlowProcessService _sequenceFlowProcessService;
         private readonly IBpmNetStartEventProcessService _startEventProcessService;
         private readonly IBpmNetUserTaskProcessService _userTaskProcessService;
@@ -66,6 +64,7 @@ namespace BpmNet.Core
 
         public ProcessFlowService(
             IMemoryCache cache,
+            IBpmNetDefinitionService definitionService,
             IBpmNetSequenceFlowProcessService sequenceFlowProcessService,
             IBpmNetStartEventProcessService startEventProcessService,
             IBpmNetUserTaskProcessService userTaskProcessService,
@@ -102,7 +101,7 @@ namespace BpmNet.Core
         {
             _cache = cache;
             _instanceStore = storeResolver.GetProcessInstanceStore<TInstance, TInstanceFlow>();
-            _definitionStore = storeResolver.GetDefinitionStore<TDefinition>();
+            _definitionService = definitionService;
             _processStore = storeResolver.GetProcessStore<TProcess>();
 
             _sequenceFlowProcessService = sequenceFlowProcessService;
@@ -150,20 +149,25 @@ namespace BpmNet.Core
 
         private Task<BpmnProcess> GetBpmnProcessAsync(string processId, CancellationToken cancellationToken)
         {
-            return _cache.GetOrCreateAsync(string.Concat(BpmnProcessPrefix, processId), proc => 
+            return _cache.GetOrCreateAsync(string.Concat(Cache.Prefix.BpmnProcess, processId), proc =>
             {
-                return _processStore.GetProcessAsync(processId, cancellationToken).ContinueWith(tProcess =>
+                return _processStore.GetProcessAsync(processId, cancellationToken).ContinueWith(async tProcess =>
                 {
                     if (tProcess.Result == null)
                     {
                         throw new ArgumentException("Process not found.");
                     }
-                    return _definitionStore.GetDefinitionAsync(tProcess.Result.DefinitionId, cancellationToken).ContinueWith(tDefinition =>
+
+                    return await _definitionService.GetDefinitionAsync(tProcess.Result.DefinitionId, cancellationToken).ContinueWith(definition =>
                     {
-                        return tDefinition.Result.Items.OfType<BpmnProcess>().FirstOrDefault(t => t.Id == processId);
+                        if (definition.Result == null)
+                        {
+                            throw new ArgumentException("Definition not found.");
+                        }
+                        return definition.Result.Items.OfType<BpmnProcess>().FirstOrDefault(p => p.Id == processId);
                     });
-                }).Unwrap();
-            });
+                });
+            }).Unwrap();
         }
 
         private async Task<IEnumerable<BpmnSequenceFlow>> GetBySourceRefAsync(string processId, string sourceRef, CancellationToken cancellationToken)
