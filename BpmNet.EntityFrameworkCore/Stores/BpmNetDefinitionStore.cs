@@ -79,6 +79,7 @@ namespace BpmNet.EntityFrameworkCore.Stores
                 (from definition in context.Set<TDefinition>().AsNoTracking()
                  where definition.TimeStamp > lastCheck
                  select definition));
+
         public Task<TDefinition[]> GetLatestDefinitionAsync(DateTime lastCheck, CancellationToken cancellationToken)
         {
             return GetLatestDefinitionCompiled(Context, lastCheck).ToArrayAsync(cancellationToken);

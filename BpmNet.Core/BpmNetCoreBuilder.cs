@@ -71,6 +71,35 @@ namespace Microsoft.Extensions.DependencyInjection
         }
         #endregion
 
+        #region Process
+        /// <summary>
+        /// Configures BpmNet to use the specified entity as the default Process entity.
+        /// </summary>
+        /// <returns>The <see cref="BpmNetCoreBuilder"/>.</returns>
+        public BpmNetCoreBuilder SetDefaultProcessEntity<TProcess>() where TProcess : class
+            => SetDefaultProcessEntity(typeof(TProcess));
+
+        /// <summary>
+        /// Configures BpmNet to use the specified entity as the default definition entity.
+        /// </summary>
+        /// <param name="type">The definition entity type.</param>
+        /// <returns>The <see cref="BpmNetCoreBuilder"/>.</returns>
+        public BpmNetCoreBuilder SetDefaultProcessEntity(Type type)
+        {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            if (type.IsValueType)
+            {
+                throw new ArgumentException("The specified type is invalid.", nameof(type));
+            }
+
+            return Configure(options => options.DefaultDefinitionType = type);
+        }
+        #endregion
+
         #region ProcessInstance
         /// <summary>
         /// Configures BpmNet to use the specified entity as the default ProcessInstance.
@@ -190,7 +219,7 @@ namespace Microsoft.Extensions.DependencyInjection
             Services.Replace(new ServiceDescriptor(typeof(IBpmNetStoreResolver), type, lifetime));
 
             return this;
-        } 
+        }
         #endregion
 
         public BpmNetCoreBuilder ReplaceDefinitionService<TService>(ServiceLifetime lifetime = ServiceLifetime.Scoped)

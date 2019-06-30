@@ -30,6 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddMemoryCache();
 
             builder.SetDefaultDefinitionEntity<BpmNetDefinition>();
+            builder.SetDefaultProcessEntity<BpmNetProcess>();
             builder.SetDefaultProcessInstanceTypeEntity<BpmNetProcessInstance>();
             builder.SetDefaultProcessInstanceFlowTypeEntity<BpmNetInstanceFlow>();
             builder.SetDefaultHistoryFlowTypeEntity<BpmNetHistory>();
@@ -37,6 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.ReplaceStoreResolver<BpmNetStoreResolver>();
 
             builder.Services.TryAddScoped(typeof(BpmNetDefinitionStore<,>));
+            builder.Services.TryAddScoped(typeof(BpmNetProcessStore<,>));
             builder.Services.TryAddScoped(typeof(BpmNetProcessInstanceStore<,,>));
             builder.Services.TryAddScoped(typeof(BpmNetHistoryStore<,>));
 
