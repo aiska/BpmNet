@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace BpmNet.Bpmn
 {
-    [XmlInclude(typeof(BPMNEdge))]
+    [XmlInclude(typeof(BpmnEdge))]
     [Serializable()]
     [DebuggerStepThrough()]
     [XmlType(Namespace = "http://www.omg.org/spec/DD/20100524/DI")]

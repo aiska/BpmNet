@@ -9,7 +9,7 @@ namespace BpmNet.Bpmn
     [DebuggerStepThrough()]
     [XmlType(Namespace = "http://www.omg.org/spec/BPMN/20100524/DI")]
     [XmlRoot(Namespace = "http://www.omg.org/spec/BPMN/20100524/DI", IsNullable = false)]
-    public partial class BPMNLabel : Label
+    public partial class BpmnLabel : Label
     {
 
         [XmlAttribute("labelStyle")]

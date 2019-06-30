@@ -9,12 +9,12 @@ namespace BpmNet.Bpmn
     [DebuggerStepThrough()]
     [XmlType(Namespace = "http://www.omg.org/spec/BPMN/20100524/DI")]
     [XmlRoot(Namespace = "http://www.omg.org/spec/BPMN/20100524/DI", IsNullable = false)]
-    public partial class BPMNDiagram : Diagram
+    public partial class BpmnDiagram : Diagram
     {
         [XmlElement("BPMNPlane")]
-        public BPMNPlane BPMNPlane { get; set; }
+        public BpmnPlane BPMNPlane { get; set; }
 
         [XmlElement("BPMNLabelStyle")]
-        public BPMNLabelStyle[] BPMNLabelStyle { get; set; }
+        public BpmnLabelStyle[] BPMNLabelStyle { get; set; }
     }
 }

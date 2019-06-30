@@ -9,9 +9,9 @@ namespace BpmNet.Bpmn.Tests.Model
         [Fact]
         public void BPMNDiagram_Populate()
         {
-            BPMNDiagram diagram = new BPMNDiagram {
-                BPMNPlane = new BPMNPlane (),
-                BPMNLabelStyle = new BPMNLabelStyle[0] { }
+            BpmnDiagram diagram = new BpmnDiagram {
+                BPMNPlane = new BpmnPlane (),
+                BPMNLabelStyle = new BpmnLabelStyle[0] { }
             };
             Assert.NotNull(diagram.BPMNPlane);
             Assert.NotNull(diagram.BPMNLabelStyle);

@@ -9,9 +9,9 @@ namespace BpmNet.Bpmn
     [DebuggerStepThrough()]
     [XmlType(Namespace = "http://www.omg.org/spec/BPMN/20100524/DI")]
     [XmlRoot(Namespace = "http://www.omg.org/spec/BPMN/20100524/DI", IsNullable = false)]
-    public partial class BPMNEdge : LabeledEdge
+    public partial class BpmnEdge : LabeledEdge
     {
-        public BPMNLabel BPMNLabel { get; set; }
+        public BpmnLabel BPMNLabel { get; set; }
 
         [XmlAttribute("bpmnElement")]
         public XmlQualifiedName BpmnElement { get; set; }

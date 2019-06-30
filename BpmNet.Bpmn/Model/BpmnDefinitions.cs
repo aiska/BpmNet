@@ -49,7 +49,7 @@ namespace BpmNet.Bpmn
         public BpmnRootElement[] Items { get; set; }
 
         [XmlElement("BPMNDiagram", Namespace = "http://www.omg.org/spec/BPMN/20100524/DI")]
-        public BPMNDiagram[] BPMNDiagram { get; set; }
+        public BpmnDiagram[] BPMNDiagram { get; set; }
 
         [XmlElement("relationship")]
         public BpmnRelationship[] Relationship { get; set; }

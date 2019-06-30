@@ -10,9 +10,9 @@ namespace BpmNet.Bpmn.Tests.Model
         [Fact]
         public void BPMNEdge_Populate()
         {
-            BPMNEdge edge = new BPMNEdge
+            BpmnEdge edge = new BpmnEdge
             {
-                BPMNLabel = new BPMNLabel(),
+                BPMNLabel = new BpmnLabel(),
                 BpmnElement = XmlQualifiedName.Empty,
                 SourceElement = XmlQualifiedName.Empty,
                 TargetElement = XmlQualifiedName.Empty,

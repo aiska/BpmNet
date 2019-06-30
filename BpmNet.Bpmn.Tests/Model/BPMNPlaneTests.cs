@@ -10,10 +10,10 @@ namespace BpmNet.Bpmn.Tests.Model
         [Fact]
         public void BPMNPlane_Populate()
         {
-            BPMNPlane plane = new BPMNPlane
+            BpmnPlane plane = new BpmnPlane
             {
                 BpmnElement = XmlQualifiedName.Empty,
-                DiagramElements = new BPMNEdge[0] { }
+                DiagramElements = new BpmnEdge[0] { }
             };
             Assert.NotNull(plane.BpmnElement);
             Assert.NotNull(plane.DiagramElements);

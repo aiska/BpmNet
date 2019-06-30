@@ -10,7 +10,7 @@ namespace BpmNet.Bpmn.Tests.Model
         [Fact]
         public void BPMNLabel_Populate()
         {
-            BPMNLabel label = new BPMNLabel
+            BpmnLabel label = new BpmnLabel
             {
                 LabelStyle = XmlQualifiedName.Empty,
             };

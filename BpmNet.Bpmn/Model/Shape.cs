@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace BpmNet.Bpmn
 {
     [XmlInclude(typeof(LabeledShape))]
-    [XmlInclude(typeof(BPMNShape))]
+    [XmlInclude(typeof(BpmnShape))]
     [Serializable()]
     [DebuggerStepThrough()]
     [XmlType(Namespace = "http://www.omg.org/spec/DD/20100524/DI")]

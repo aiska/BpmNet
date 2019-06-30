@@ -10,9 +10,9 @@ namespace BpmNet.Bpmn.Tests.Model
         [Fact]
         public void BPMNShape_Populate()
         {
-            BPMNShape shape = new BPMNShape
+            BpmnShape shape = new BpmnShape
             {
-                BPMNLabel = new BPMNLabel(),
+                BPMNLabel = new BpmnLabel(),
                 BpmnElement = XmlQualifiedName.Empty,
                 IsHorizontal = false,
                 IsHorizontalSpecified = false,

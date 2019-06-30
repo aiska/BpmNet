@@ -9,14 +9,14 @@ namespace BpmNet.Bpmn
     [DebuggerStepThrough()]
     [XmlType(Namespace = "http://www.omg.org/spec/BPMN/20100524/DI")]
     [XmlRoot(Namespace = "http://www.omg.org/spec/BPMN/20100524/DI", IsNullable = false)]
-    public partial class BPMNPlane : Plane
+    public partial class BpmnPlane : Plane
     {
 
         [XmlAttribute("bpmnElement")]
         public XmlQualifiedName BpmnElement { get; set; }
 
-        [XmlElement(typeof(BPMNShape))]
-        [XmlElement(typeof(BPMNEdge))]
+        [XmlElement(typeof(BpmnShape))]
+        [XmlElement(typeof(BpmnEdge))]
         public DiagramElement[] DiagramElements { get; set; }
     }
 

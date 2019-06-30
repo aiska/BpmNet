@@ -9,7 +9,7 @@ namespace BpmNet.Bpmn.Tests.Model
         [Fact]
         public void BPMNLabelStyle_Populate()
         {
-            BPMNLabelStyle labelStyle = new BPMNLabelStyle
+            BpmnLabelStyle labelStyle = new BpmnLabelStyle
             {
                 Font = new Font()
             };
