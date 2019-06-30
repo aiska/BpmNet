@@ -11,9 +11,9 @@ namespace BpmNet.Api.Tests.Controllers
     [ApiController]
     public class ProcessInstanceController : ControllerBase
     {
-        private readonly IProcessFlowService _processInstanceService;
+        private readonly IBpmNetProcessService _processInstanceService;
 
-        public ProcessInstanceController(IProcessFlowService processInstanceService)
+        public ProcessInstanceController(IBpmNetProcessService processInstanceService)
         {
             _processInstanceService = processInstanceService;
         }
@@ -28,7 +28,7 @@ namespace BpmNet.Api.Tests.Controllers
         [HttpGet("List")]
         public async Task<IActionResult> GetProcessInstanceAsync(string processId)
         {
-            var instances = await _processInstanceService.ListAsync(query =>
+            var instances = await _processInstanceService.ListProcessInstanceAsync(query =>
             {
                 return query.Cast<BpmNetProcessInstance>().Include(t => t.Flows).Where(t => t.ProcessId == processId);
             }, default);
@@ -38,7 +38,7 @@ namespace BpmNet.Api.Tests.Controllers
         [HttpGet("Flow")]
         public async Task<IActionResult> GetProcessInstanceFlowAsync(string processId, string flowId)
         {
-            var instances = await _processInstanceService.ListAsync(query =>
+            var instances = await _processInstanceService.ListProcessInstanceAsync(query =>
             {
                 return query.Cast<BpmNetProcessInstance>().Where(t => t.ProcessId == processId && t.Flows.Any(flow => flow.FlowId == flowId));
             }, default);

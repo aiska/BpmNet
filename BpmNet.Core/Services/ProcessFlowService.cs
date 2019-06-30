@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace BpmNet.Core
 {
     public class ProcessFlowService<TDefinition, TInstance, TInstanceFlow>
-        : IProcessFlowService
+        : IBpmNetProcessService
         where TDefinition : class, IBpmNetDefinition
         where TInstance : class, IProcessInstance<TInstanceFlow>, new()
         where TInstanceFlow : class, IBpmNetInstanceFlow, new()
@@ -535,7 +535,17 @@ namespace BpmNet.Core
             return instance;
         }
 
-        public Task<ImmutableArray<TResult>> ListAsync<TResult>(Func<IQueryable<object>, IQueryable<TResult>> query, CancellationToken cancellationToken)
+        public Task<ImmutableArray<TResult>> ListProcessInstanceAsync<TResult>(Func<IQueryable<object>, IQueryable<TResult>> query, CancellationToken cancellationToken)
+        {
+            if (query == null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
+            return _instanceStore.ListAsync(query, cancellationToken);
+        }
+
+        public Task<ImmutableArray<TResult>> ListProcessAsync<TResult>(Func<IQueryable<object>, IQueryable<TResult>> query, CancellationToken cancellationToken)
         {
             if (query == null)
             {

@@ -2,6 +2,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace BpmNet.EntityFrameworkCore.Tests.Services
@@ -12,13 +14,13 @@ namespace BpmNet.EntityFrameworkCore.Tests.Services
         private static readonly string PATH = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"BpmnFile\sample.bpmn");
 
         [Fact]
-        public void DeserializeDefinitions_DeserializeObject()
+        public async Task DeserializeDefinitions_DeserializeObjectAsync()
         {
             // Arrange
             var serializer = new BpmNetSerializerService();
 
             // Act
-            var result = serializer.Deserialize(PATH);
+            var result = await serializer.DeserializeBpmnFileAsync(PATH, CancellationToken.None);
 
             // Assert
             Assert.NotNull(result);

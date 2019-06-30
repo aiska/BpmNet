@@ -193,9 +193,8 @@ namespace BpmNet.EntityFrameworkCore.Stores
 
         private static readonly Func<TContext, string, Task<BpmNetProcess>> GetXmlAsyncCompiled =
             EF.CompileAsyncQuery((TContext context, string processId) =>
-                (from process in context.Set<BpmNetProcess>().AsNoTracking()
-                 where process.Id.Equals(processId)
-                 select process).FirstOrDefault());
+                (context.Set<BpmNetProcess>().AsNoTracking().FirstOrDefault(t => t.Id.Equals(processId))));
+
         private Task<BpmNetProcess> GetBpmNetProcess(string processId)
         {
             return GetXmlAsyncCompiled(Context, processId);
@@ -212,7 +211,7 @@ namespace BpmNet.EntityFrameworkCore.Stores
             });
         }
 
-        public async Task SaveDefinitionAsync(BpmnDefinitions bpmn, string content, bool replace, CancellationToken cancellationToken)
+        public Task SaveDefinitionAsync(BpmnDefinitions bpmn, string content, bool replace, CancellationToken cancellationToken)
         {
             if (bpmn == null)
             {
@@ -225,20 +224,23 @@ namespace BpmNet.EntityFrameworkCore.Stores
             }
 
             TDefinition bpmNet = new TDefinition { Id = bpmn.Id, Xml = content, TimeStamp = DateTime.UtcNow };
-            if (await IsExistsAsync(t => t.Id == bpmn.Id, cancellationToken))
+            return IsExistsAsync(t => t.Id == bpmn.Id, cancellationToken).ContinueWith((exist) =>
             {
-                if (!replace)
+                if (exist.Result)
                 {
-                    throw new InvalidOperationException("Definition already exists.");
+                    if (!replace)
+                    {
+                        throw new InvalidOperationException("Definition already exists.");
+                    }
+                    Context.UpdateRange(GetProcesses(bpmn));
+                    UpdateAsync(bpmNet, cancellationToken);
                 }
-                Context.UpdateRange(GetProcesses(bpmn));
-                await UpdateAsync(bpmNet, cancellationToken);
-            }
-            else
-            {
-                Context.AddRange(GetProcesses(bpmn));
-                await CreateAsync(bpmNet, cancellationToken);
-            }
+                else
+                {
+                    Context.AddRange(GetProcesses(bpmn));
+                    CreateAsync(bpmNet, cancellationToken);
+                }
+            }, cancellationToken);
         }
 
         private IEnumerable<BpmNetProcess> GetProcesses(BpmnDefinitions bpmn)

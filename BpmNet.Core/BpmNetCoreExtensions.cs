@@ -5,6 +5,7 @@ using BpmNet.Core.FlowService;
 using BpmNet.Core.Resolvers;
 using BpmNet.Core.Services;
 using BpmNet.Resolvers;
+using BpmNet.Serializer;
 using BpmNet.Services;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
@@ -39,7 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.TryAddScoped(typeof(BpmNetDefinitionService<>));
 
             builder.Services.TryAddScoped<IBpmNetStoreResolver, BpmNetStoreResolver>();
-            builder.Services.TryAddScoped<IBpmNetSerializerService, BpmNetSerializerService>();
+            builder.Services.TryAddScoped<IBpmNetSerializer, BpmNetSerializerService>();
             builder.Services.TryAddScoped<IBpmNetSequenceFlowProcessService, BpmNetSequenceFlowProcessService>();
             builder.Services.TryAddScoped<IBpmNetStartEventProcessService, BpmNetStartEventProcessService>();
             builder.Services.TryAddScoped<IBpmNetUserTaskProcessService, BpmNetUserTaskProcessService>();
@@ -106,7 +107,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         .ToString());
                 }
 
-                return (IProcessFlowService)provider.GetRequiredService(
+                return (IBpmNetProcessService)provider.GetRequiredService(
                     typeof(ProcessFlowService<,,>).MakeGenericType(
                         options.DefaultDefinitionType,
                         options.DefaultProcessInstanceType,

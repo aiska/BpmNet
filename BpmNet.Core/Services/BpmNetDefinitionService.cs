@@ -1,4 +1,5 @@
-﻿using BpmNet.Bpmn;
+﻿using BpmNet.Serializer;
+using BpmNet.Bpmn;
 using BpmNet.Model;
 using BpmNet.Resolvers;
 using BpmNet.Stores;
@@ -15,14 +16,17 @@ namespace BpmNet.Core.Services
     {
 
         private readonly IBpmNetDefinitionStore<TDefinition> _definitionStore;
+        private readonly IBpmNetSerializer _serializer;
 
         protected ILogger Logger { get; }
 
         public BpmNetDefinitionService(
             IBpmNetStoreResolver storeResolver,
+            IBpmNetSerializer serializer,
             ILogger<BpmNetDefinitionService<TDefinition>> logger)
         {
             _definitionStore = storeResolver.GetDefinitionStore<TDefinition>();
+            _serializer = serializer;
             Logger = logger;
         }
 
@@ -36,18 +40,19 @@ namespace BpmNet.Core.Services
                 throw new ArgumentNullException(nameof(stream));
             }
 
-            using (MemoryStream ms = new MemoryStream())
-            using (StreamReader sr = new StreamReader(stream))
-            {
-                stream.CopyTo(ms);
-                stream.Position = 0;
-                ms.Position = 0;
-                var bpmnTask = SerializerService.DeserializeAsync(ms, cancellationToken);
-                var content = sr.ReadToEndAsync();
-                var bpmn = await bpmnTask;
-                await _definitionStore.SaveDefinitionAsync(bpmn, await content, replace, cancellationToken);
-                return bpmn;
-            }
+            Task[] tasks = new Task[2];
+
+            // Deserialize to BpmnDefinitions
+            var bpmnTask = _serializer.DeserializeBpmnStreamAsync(stream, cancellationToken);
+
+            // Deserialize to String
+            var contentTask = _serializer.DeserializeStreamAsync(stream, cancellationToken);
+
+            Task.WaitAll(bpmnTask, contentTask);
+
+            await _definitionStore.SaveDefinitionAsync(bpmnTask.Result, contentTask.Result, replace, cancellationToken);
+
+            return bpmnTask.Result;
         }
 
         public async Task<BpmnDefinitions> DeployAsync(string filePath, bool replace, CancellationToken cancellationToken)

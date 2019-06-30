@@ -33,7 +33,7 @@ namespace BpmNet.EntityFrameworkCore.Tests.Services
             var provider = services.BuildServiceProvider();
             var definitionService = provider.GetRequiredService<IBpmNetDefinitionService>();
             var definition = await definitionService.DeployAsync(TestBuilder.PATH_SAMPLE, true, CancellationToken.None);
-            IProcessFlowService service = provider.GetService<IProcessFlowService>();
+            IBpmNetProcessService service = provider.GetService<IBpmNetProcessService>();
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             var instance = await service.StartProcessAsync("Process_1", null, CancellationToken.None);
@@ -59,7 +59,7 @@ namespace BpmNet.EntityFrameworkCore.Tests.Services
             var provider = services.BuildServiceProvider();
             var definitionService = provider.GetRequiredService<IBpmNetDefinitionService>();
             var definition = await definitionService.DeployAsync(TestBuilder.GATEWAY, true, CancellationToken.None);
-            IProcessFlowService service = provider.GetService<IProcessFlowService>();
+            IBpmNetProcessService service = provider.GetService<IBpmNetProcessService>();
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             var instance = await service.StartProcessAsync("Process_Gateway", null, CancellationToken.None);

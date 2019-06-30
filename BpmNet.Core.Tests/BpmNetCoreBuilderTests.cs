@@ -1,6 +1,7 @@
 ﻿using BpmNet.Core.Services;
 using BpmNet.Model;
 using BpmNet.Resolvers;
+using BpmNet.Serializer;
 using BpmNet.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -427,14 +428,14 @@ namespace BpmNet.Core.Tests
         private class OpenGenericDefinitionService<TDefinition> : BpmNetDefinitionService<TDefinition>
             where TDefinition : class, IBpmNetDefinition, new()
         {
-            public OpenGenericDefinitionService(IBpmNetStoreResolver storeResolver, ILogger<BpmNetDefinitionService<TDefinition>> logger) : base(storeResolver, logger)
+            public OpenGenericDefinitionService(IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<TDefinition>> logger) : base(storeResolver, serializer, logger)
             {
             }
         }
 
         private class ClosedGenericDefinitionService : BpmNetDefinitionService<CustomDefinition>
         {
-            public ClosedGenericDefinitionService(IBpmNetStoreResolver storeResolver, ILogger<BpmNetDefinitionService<CustomDefinition>> logger) : base(storeResolver, logger)
+            public ClosedGenericDefinitionService(IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<CustomDefinition>> logger) : base(storeResolver, serializer, logger)
             {
             }
         }
@@ -444,7 +445,7 @@ namespace BpmNet.Core.Tests
             where TDefinition : class, IBpmNetDefinition, new()
             where THistory : class, IBpmNetHistory
         {
-            public OtherGenericDefinitionService(IBpmNetStoreResolver storeResolver, ILogger<BpmNetDefinitionService<TDefinition>> logger) : base(storeResolver, logger)
+            public OtherGenericDefinitionService(IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<TDefinition>> logger) : base(storeResolver, serializer, logger)
             {
             }
         }
