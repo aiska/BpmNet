@@ -24,7 +24,7 @@ namespace BpmNet.Stores
         Task<bool> IsExistsAsync(Expression<Func<TDefinition, bool>> predicate, CancellationToken cancellationToken);
         Task<TDefinition[]> GetLatestDefinitionAsync(DateTime lastCheck, CancellationToken cancellationToken);
         Task<string[]> GetXmlLatestAsync(DateTime lastCheck, CancellationToken cancellationToken);
-        Task<BpmnProcess> GetProcessAsync(string processId, CancellationToken cancellationToken);
+        //Task<BpmnProcess> GetProcessAsync(string processId, CancellationToken cancellationToken);
         Task<BpmnDefinitions> GetDefinitionAsync(string definitionId, CancellationToken cancellationToken);
         Task SaveDefinitionAsync(BpmnDefinitions bpmn, string content, bool replace, CancellationToken cancellationToken);
     }

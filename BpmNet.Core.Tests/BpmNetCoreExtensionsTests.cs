@@ -143,8 +143,8 @@ namespace BpmNet.Core.Tests
 
         [Theory]
 
-        [InlineData(typeof(BpmNetDefinitionService<>))]
-        [InlineData(typeof(ProcessFlowService<,,>))]
+        [InlineData(typeof(BpmNetDefinitionService<,>))]
+        [InlineData(typeof(ProcessFlowService<,,,>))]
         public void AddCore_RegistersDefaultManagers(Type type)
         {
             // Arrange

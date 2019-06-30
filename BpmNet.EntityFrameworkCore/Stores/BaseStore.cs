@@ -33,7 +33,7 @@ namespace BpmNet.EntityFrameworkCore.Stores
             Context.SaveChanges();
         }
 
-        public virtual async Task CreateAsync(TEntity entity, CancellationToken cancellationToken)
+        public virtual Task CreateAsync(TEntity entity, CancellationToken cancellationToken)
         {
             if (entity == null)
             {
@@ -43,7 +43,7 @@ namespace BpmNet.EntityFrameworkCore.Stores
             Context.Add(entity);
             try
             {
-                await Context.SaveChangesAsync(cancellationToken);
+                return Context.SaveChangesAsync(cancellationToken);
             }
 
             catch (DbUpdateConcurrencyException exception)
@@ -55,7 +55,7 @@ namespace BpmNet.EntityFrameworkCore.Stores
             }
         }
 
-        public virtual async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
+        public virtual Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
         {
             if (entity == null)
             {
@@ -64,7 +64,7 @@ namespace BpmNet.EntityFrameworkCore.Stores
             Context.Remove(entity);
             try
             {
-                await Context.SaveChangesAsync(cancellationToken);
+                return Context.SaveChangesAsync(cancellationToken);
             }
 
             catch (DbUpdateConcurrencyException exception)

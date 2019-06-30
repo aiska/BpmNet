@@ -70,6 +70,42 @@ namespace BpmNet.EntityFrameworkCore.Resolvers
             return (IBpmNetDefinitionStore<TDefinition>)_provider.GetRequiredService(type);
         }
 
+        public IBpmNetProcessStore<TProcess> GetProcessStore<TProcess>()
+            where TProcess : class, IBpmNetProcess
+        {
+            var store = _provider.GetService<IBpmNetProcessStore<TProcess>>();
+            if (store != null)
+            {
+                return store;
+            }
+
+            var type = _cache.GetOrAdd(typeof(TProcess), key =>
+            {
+                if (!typeof(BpmNetProcess).IsAssignableFrom(key))
+                {
+                    throw new InvalidOperationException(new StringBuilder()
+                        .AppendLine("The specified TProcess type is not compatible with the Entity Framework Core stores. ")
+                        .Append("When enabling the Entity Framework Core stores, make sure your custom entity is inherit From ")
+                        .Append("'BpmNetProcess' in your entity model (from the 'BpmNet.Core' package) ")
+                        .ToString());
+                }
+
+                var context = _options.CurrentValue.DbContextType;
+                if (context == null)
+                {
+                    throw new InvalidOperationException(new StringBuilder()
+                        .AppendLine("No Entity Framework Core context was specified in the BpmNet options.")
+                        .Append("To configure the BpmNet Entity Framework Core stores to use a specific 'DbContext', ")
+                        .Append("use 'options.UseEntityFrameworkCore().UseDbContext<TContext>()'.")
+                        .ToString());
+                }
+
+                return typeof(BpmNetProcessStore<,>).MakeGenericType(context, key);
+            });
+
+            return (IBpmNetProcessStore<TProcess>)_provider.GetRequiredService(type);
+        }
+
         public IBpmNetProcessInstanceStore<TInstance, TInstanceFlow> GetProcessInstanceStore<TInstance, TInstanceFlow>()
             where TInstance : class, IProcessInstance<TInstanceFlow>
             where TInstanceFlow : class, IBpmNetInstanceFlow

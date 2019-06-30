@@ -39,6 +39,23 @@ namespace BpmNet.Core.Resolvers
             return store;
         }
 
+        public IBpmNetProcessStore<TProcess> GetProcessStore<TProcess>()
+            where TProcess : class, IBpmNetProcess
+        {
+            var store = _provider.GetService<IBpmNetProcessStore<TProcess>>();
+            if (store == null)
+            {
+                throw new InvalidOperationException(new StringBuilder()
+                    .AppendLine("No process store has been registered in the dependency injection container.")
+                    .Append("To register the Entity Framework Core stores, reference the 'BpmNet.EntityFrameworkCore' ")
+                    .AppendLine("package and call 'services.AddBpmNet().AddCore().UseEntityFrameworkCore()'.")
+                    .Append("To register a custom store, create an implementation of 'IBpmNetProcessStore' and ")
+                    .Append("use 'services.AddBpmNet().AddCore().ReplaceDefinitionStore()' to add it to the DI container.")
+                    .ToString());
+            }
+            return store;
+        }
+
         public IBpmNetProcessInstanceStore<TInstance, TInstanceFlow> GetProcessInstanceStore<TInstance, TInstanceFlow>()
             where TInstance : class, IProcessInstance<TInstanceFlow>
             where TInstanceFlow : class, IBpmNetInstanceFlow

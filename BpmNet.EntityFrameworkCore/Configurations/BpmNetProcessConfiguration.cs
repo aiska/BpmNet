@@ -8,6 +8,11 @@ namespace BpmNet.EntityFrameworkCore.Configurations
     {
         public void Configure(EntityTypeBuilder<BpmNetProcess> builder)
         {
+            //Key
+            builder.HasKey(t => t.Id);
+
+            // Table
+            builder.ToTable("BPMNET_PROCESS");
         }
     }
 }

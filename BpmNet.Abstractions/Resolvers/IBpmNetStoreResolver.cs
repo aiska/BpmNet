@@ -12,6 +12,9 @@ namespace BpmNet.Resolvers
         IBpmNetDefinitionStore<TDefinition> GetDefinitionStore<TDefinition>()
             where TDefinition : class, IBpmNetDefinition;
 
+        IBpmNetProcessStore<TProcess> GetProcessStore<TProcess>()
+            where TProcess : class, IBpmNetProcess;
+
         IBpmNetHistoryStore<THistory> GetHistoryStore<THistory>()
             where THistory : class, IBpmNetHistory;
     }

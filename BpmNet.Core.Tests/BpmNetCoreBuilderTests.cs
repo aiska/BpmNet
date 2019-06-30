@@ -64,7 +64,7 @@ namespace BpmNet.Core.Tests
             // Arrange
             var services = CreateServices();
             var builder = CreateBuilder(services);
-            var type = typeof(OtherGenericDefinitionService<,>);
+            var type = typeof(OtherGenericDefinitionService<,,>);
 
             // Act and assert
             var exception = Assert.Throws<ArgumentException>(() => builder.ReplaceDefinitionService(type));
@@ -81,18 +81,18 @@ namespace BpmNet.Core.Tests
             var builder = CreateBuilder(services);
 
             // Act
-            builder.ReplaceDefinitionService(typeof(OpenGenericDefinitionService<>));
+            builder.ReplaceDefinitionService(typeof(OpenGenericDefinitionService<,>));
 
             // Assert
             Assert.Contains(services, service =>
-                service.ServiceType == typeof(OpenGenericDefinitionService<>) &&
-                service.ImplementationType == typeof(OpenGenericDefinitionService<>));
+                service.ServiceType == typeof(OpenGenericDefinitionService<,>) &&
+                service.ImplementationType == typeof(OpenGenericDefinitionService<,>));
             Assert.Contains(services, service =>
-                service.ServiceType == typeof(BpmNetDefinitionService<>) &&
-                service.ImplementationType == typeof(OpenGenericDefinitionService<>));
+                service.ServiceType == typeof(BpmNetDefinitionService<,>) &&
+                service.ImplementationType == typeof(OpenGenericDefinitionService<,>));
             Assert.DoesNotContain(services, service =>
-                service.ServiceType == typeof(BpmNetDefinitionService<>) &&
-                service.ImplementationType == typeof(BpmNetDefinitionService<>));
+                service.ServiceType == typeof(BpmNetDefinitionService<,>) &&
+                service.ImplementationType == typeof(BpmNetDefinitionService<,>));
         }
 
         [Fact]
@@ -115,11 +115,11 @@ namespace BpmNet.Core.Tests
                 service.ServiceType == typeof(ClosedGenericDefinitionService) &&
                 service.ImplementationFactory != null);
             Assert.Contains(services, service =>
-                service.ServiceType == typeof(BpmNetDefinitionService<CustomDefinition>) &&
+                service.ServiceType == typeof(BpmNetDefinitionService<CustomDefinition, CustomProcess>) &&
                 service.ImplementationType == typeof(ClosedGenericDefinitionService));
             Assert.Contains(services, service =>
-                service.ServiceType == typeof(BpmNetDefinitionService<>) &&
-                service.ImplementationType == typeof(BpmNetDefinitionService<>));
+                service.ServiceType == typeof(BpmNetDefinitionService<,>) &&
+                service.ImplementationType == typeof(BpmNetDefinitionService<,>));
         }
         #endregion
 
@@ -243,6 +243,59 @@ namespace BpmNet.Core.Tests
             Assert.Equal(typeof(CustomDefinition), options.DefaultDefinitionType);
         }
         #endregion
+
+        #region SetDefaultProcessEntity
+        [Fact]
+        public void SetDefaultProcessEntity_ThrowsAnExceptionForNullType()
+        {
+            // Arrange
+            var services = CreateServices();
+            var builder = CreateBuilder(services);
+
+            // Act and assert
+            var exception = Assert.Throws<ArgumentNullException>(delegate
+            {
+                return builder.SetDefaultProcessEntity(type: null);
+            });
+
+            Assert.Equal("type", exception.ParamName);
+        }
+
+        [Fact]
+        public void SetDefaultProcessEntity_ThrowsAnExceptionForInvalidType()
+        {
+            // Arrange
+            var services = CreateServices();
+            var builder = CreateBuilder(services);
+
+            // Act and assert
+            var exception = Assert.Throws<ArgumentException>(delegate
+            {
+                return builder.SetDefaultProcessEntity(type: typeof(int));
+            });
+
+            Assert.Equal("type", exception.ParamName);
+            Assert.StartsWith("The specified type is invalid.", exception.Message);
+        }
+
+        [Fact]
+        public void SetDefaultProcessEntity_EntityIsCorrectlySet()
+        {
+            // Arrange
+            var services = CreateServices();
+            var builder = CreateBuilder(services);
+
+            // Act
+            builder.SetDefaultProcessInstanceTypeEntity<CustomProcess>();
+
+            // Assert
+            var provider = services.BuildServiceProvider();
+            var options = provider.GetRequiredService<IOptionsMonitor<BpmNetCoreOptions>>().CurrentValue;
+
+            Assert.Equal(typeof(CustomProcess), options.DefaultProcessInstanceType);
+        }
+        #endregion
+
 
         #region SetDefaultProcessInstanceEntity
         [Fact]
@@ -425,27 +478,29 @@ namespace BpmNet.Core.Tests
         }
 
         #region Definition Service
-        private class OpenGenericDefinitionService<TDefinition> : BpmNetDefinitionService<TDefinition>
+        private class OpenGenericDefinitionService<TDefinition, TProcess> : BpmNetDefinitionService<TDefinition, TProcess>
             where TDefinition : class, IBpmNetDefinition, new()
+            where TProcess : class, IBpmNetProcess
         {
-            public OpenGenericDefinitionService(IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<TDefinition>> logger) : base(storeResolver, serializer, logger)
+            public OpenGenericDefinitionService(IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<TDefinition, TProcess>> logger) : base(storeResolver, serializer, logger)
             {
             }
         }
 
-        private class ClosedGenericDefinitionService : BpmNetDefinitionService<CustomDefinition>
+        private class ClosedGenericDefinitionService : BpmNetDefinitionService<CustomDefinition, CustomProcess>
         {
-            public ClosedGenericDefinitionService(IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<CustomDefinition>> logger) : base(storeResolver, serializer, logger)
+            public ClosedGenericDefinitionService(IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<CustomDefinition, CustomProcess>> logger) : base(storeResolver, serializer, logger)
             {
             }
         }
 
 
-        private class OtherGenericDefinitionService<TDefinition, THistory> : BpmNetDefinitionService<TDefinition>
+        private class OtherGenericDefinitionService<TDefinition, TProcess, THistory> : BpmNetDefinitionService<TDefinition, TProcess>
             where TDefinition : class, IBpmNetDefinition, new()
+            where TProcess : class, IBpmNetProcess
             where THistory : class, IBpmNetHistory
         {
-            public OtherGenericDefinitionService(IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<TDefinition>> logger) : base(storeResolver, serializer, logger)
+            public OtherGenericDefinitionService(IBpmNetStoreResolver storeResolver, IBpmNetSerializer serializer, ILogger<BpmNetDefinitionService<TDefinition, TProcess>> logger) : base(storeResolver, serializer, logger)
             {
             }
         }
@@ -467,6 +522,11 @@ namespace BpmNet.Core.Tests
             {
                 return null;
             }
+
+            IBpmNetProcessStore<TProcess> IBpmNetStoreResolver.GetProcessStore<TProcess>()
+            {
+                return null;
+            }
         }
 
 
@@ -483,6 +543,16 @@ namespace BpmNet.Core.Tests
             public string BussinesKey { get; set; }
             public string TenantId { get; set; }
             public InstanceStatus Status { get; set; }
+        }
+
+        public class CustomProcess : IBpmNetProcess
+        {
+            public string Id { get; set; }
+            public string Name { get; set; }
+            public string DefinitionId { get; set; }
+            public bool IsExecutable { get; set; }
+            public bool IsClosed { get; set; }
+            public DateTime TimeStamp { get; set; }
         }
 
         public class CustomInstanceFlow : IBpmNetInstanceFlow

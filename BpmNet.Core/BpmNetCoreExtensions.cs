@@ -36,8 +36,8 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddLogging();
             builder.Services.AddOptions();
 
-            builder.Services.TryAddScoped(typeof(ProcessFlowService<,,>));
-            builder.Services.TryAddScoped(typeof(BpmNetDefinitionService<>));
+            builder.Services.TryAddScoped(typeof(ProcessFlowService<,,,>));
+            builder.Services.TryAddScoped(typeof(BpmNetDefinitionService<,>));
 
             builder.Services.TryAddScoped<IBpmNetStoreResolver, BpmNetStoreResolver>();
             builder.Services.TryAddScoped<IBpmNetSerializer, BpmNetSerializerService>();
@@ -88,14 +88,16 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
 
                 return (IBpmNetDefinitionService)provider.GetRequiredService(
-                    typeof(BpmNetDefinitionService<>).MakeGenericType(
-                        options.DefaultDefinitionType
+                    typeof(BpmNetDefinitionService<,>).MakeGenericType(
+                        options.DefaultDefinitionType,
+                        options.DefaultProcessType
                     ));
             });
             builder.Services.TryAddScoped(provider =>
             {
                 var options = provider.GetRequiredService<IOptionsMonitor<BpmNetCoreOptions>>().CurrentValue;
                 if (options.DefaultProcessInstanceType == null ||
+                    options.DefaultProcessType == null ||
                     options.DefaultDefinitionType == null ||
                     options.DefaultProcessInstanceFlowType == null)
                 {
@@ -108,8 +110,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
 
                 return (IBpmNetProcessService)provider.GetRequiredService(
-                    typeof(ProcessFlowService<,,>).MakeGenericType(
+                    typeof(ProcessFlowService<,,,>).MakeGenericType(
                         options.DefaultDefinitionType,
+                        options.DefaultProcessType,
                         options.DefaultProcessInstanceType,
                         options.DefaultProcessInstanceFlowType
                     ));

@@ -43,7 +43,7 @@ namespace BpmNet.EntityFrameworkCore.Tests
             var builder = TestBuilder.CreateBuilder(services);
 
             // Act
-            builder.ReplaceDefaultEntities<CustomDefinition, CustomProcessInstance, CustomInstanceFlow, CustomHistory>();
+            builder.ReplaceDefaultEntities<CustomDefinition, CustomProcess, CustomProcessInstance, CustomInstanceFlow, CustomHistory>();
 
             // Assert
             var provider = services.BuildServiceProvider();

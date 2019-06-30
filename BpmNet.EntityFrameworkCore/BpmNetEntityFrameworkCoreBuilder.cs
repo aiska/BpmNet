@@ -63,8 +63,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// from the default BpmNet Entity Framework Core entities.
         /// </summary>
         /// <returns>The <see cref="BpmNetEntityFrameworkCoreBuilder"/>.</returns>
-        public BpmNetEntityFrameworkCoreBuilder ReplaceDefaultEntities<TDefinition, TInstance, TInstanceFlow, THistory>()
+        public BpmNetEntityFrameworkCoreBuilder ReplaceDefaultEntities<TDefinition, TProcess, TInstance, TInstanceFlow, THistory>()
             where TDefinition : class, IBpmNetDefinition
+            where TProcess : class, IBpmNetProcess
             where TInstance : class, IProcessInstance<TInstanceFlow>
             where TInstanceFlow : BpmNetInstanceFlow
             where THistory : BpmNetHistory
@@ -72,7 +73,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             Services.Configure<BpmNetCoreOptions>(options =>
             {
-                options.DefaultDefinitionType= typeof(TDefinition);
+                options.DefaultDefinitionType = typeof(TDefinition);
+                options.DefaultProcessType = typeof(TProcess);
                 options.DefaultProcessInstanceType = typeof(TInstance);
                 options.DefaultProcessInstanceFlowType = typeof(TInstanceFlow);
                 options.DefaultHistoryFlowType = typeof(THistory);

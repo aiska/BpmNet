@@ -63,7 +63,7 @@ namespace BpmNet.EntityFrameworkCore.Tests
             builder.ApplyConfiguration(new BpmNetProcessInstanceConfiguration<BpmNetProcessInstance, BpmNetInstanceFlow>());
             builder.ApplyConfiguration(new BpmNetInstanceFlowConfiguration<BpmNetInstanceFlow>());
             builder.ApplyConfiguration(new BpmNetHistoryConfiguration<BpmNetHistory>());
-            builder.ApplyConfiguration(new BpmNetRootConfiguration());
+            //builder.ApplyConfiguration(new BpmNetRootConfiguration());
             builder.ApplyConfiguration(new BpmNetProcessConfiguration());
         }
     }
@@ -71,6 +71,16 @@ namespace BpmNet.EntityFrameworkCore.Tests
     [ExcludeFromCodeCoverage]
     public class CustomDefinition : BpmNetDefinition { }
 
+    [ExcludeFromCodeCoverage]
+    public class CustomProcess : IBpmNetProcess
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string DefinitionId { get; set; }
+        public bool IsExecutable { get; set; }
+        public bool IsClosed { get; set; }
+        public DateTime TimeStamp { get; set; }
+    }
     [ExcludeFromCodeCoverage]
     public class CustomProcessInstance : IProcessInstance<CustomInstanceFlow>
     {

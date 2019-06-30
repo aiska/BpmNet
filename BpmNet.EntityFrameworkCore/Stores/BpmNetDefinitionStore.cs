@@ -30,7 +30,6 @@ namespace BpmNet.EntityFrameworkCore.Stores
 
         private readonly IMemoryCache _cache;
         private const string DefinitionPrefix = "Def_";
-        private const string ProcessPrefix = "Proc_";
 
         /// <summary>
         /// Gets the options associated with the current store.
@@ -174,23 +173,23 @@ namespace BpmNet.EntityFrameworkCore.Stores
             throw new NotImplementedException();
         }
 
-        public Task<BpmnProcess> GetProcessAsync(string processId, CancellationToken cancellationToken)
-        {
-            return _cache.GetOrCreateAsync(string.Concat(ProcessPrefix, processId), proc =>
-            {
-                return GetBpmNetProcess(processId).ContinueWith(t =>
-                {
-                    if (t.Result == null)
-                    {
-                        return null;
-                    }
-                    return GetDefinitionAsync(t.Result.ReffId, cancellationToken).ContinueWith(defi =>
-                    {
-                        return defi.Result.Items.OfType<BpmnProcess>().FirstOrDefault(p => p.Id == processId);
-                    });
-                }).Unwrap();
-            });
-        }
+        //public Task<BpmnProcess> GetProcessAsync(string processId, CancellationToken cancellationToken)
+        //{
+        //    return _cache.GetOrCreateAsync(string.Concat(ProcessPrefix, processId), proc =>
+        //    {
+        //        return GetBpmNetProcess(processId).ContinueWith(t =>
+        //        {
+        //            if (t.Result == null)
+        //            {
+        //                return null;
+        //            }
+        //            return GetDefinitionAsync(t.Result.ReffId, cancellationToken).ContinueWith(defi =>
+        //            {
+        //                return defi.Result.Items.OfType<BpmnProcess>().FirstOrDefault(p => p.Id == processId);
+        //            });
+        //        }).Unwrap();
+        //    });
+        //}
 
         private static readonly Func<TContext, string, Task<BpmNetProcess>> GetXmlAsyncCompiled =
             EF.CompileAsyncQuery((TContext context, string processId) =>
@@ -233,24 +232,13 @@ namespace BpmNet.EntityFrameworkCore.Stores
                     {
                         throw new InvalidOperationException("Definition already exists.");
                     }
-                    Context.UpdateRange(GetProcesses(bpmn));
                     UpdateAsync(bpmNet, cancellationToken);
                 }
                 else
                 {
-                    Context.AddRange(GetProcesses(bpmn));
                     CreateAsync(bpmNet, cancellationToken);
                 }
             }, cancellationToken);
-        }
-
-        private IEnumerable<BpmNetProcess> GetProcesses(BpmnDefinitions bpmn)
-        {
-            foreach (var item in bpmn.Items.OfType<BpmnProcess>())
-            {
-                _cache.Set(string.Concat(ProcessPrefix, item.Id), item);
-                yield return new BpmNetProcess { Id = item.Id, ReffId = bpmn.Id };
-            }
         }
     }
 }

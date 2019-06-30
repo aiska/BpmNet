@@ -131,7 +131,6 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.ApplyConfiguration(new BpmNetProcessInstanceConfiguration<TInstance, TInstanceFlow>());
             builder.ApplyConfiguration(new BpmNetInstanceFlowConfiguration<TInstanceFlow>());
             builder.ApplyConfiguration(new BpmNetHistoryConfiguration<THistory>());
-            builder.ApplyConfiguration(new BpmNetRootConfiguration());
             builder.ApplyConfiguration(new BpmNetProcessConfiguration());
             
             return builder;

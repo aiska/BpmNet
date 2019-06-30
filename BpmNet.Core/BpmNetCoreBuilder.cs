@@ -96,7 +96,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentException("The specified type is invalid.", nameof(type));
             }
 
-            return Configure(options => options.DefaultDefinitionType = type);
+            return Configure(options => options.DefaultProcessType = type);
         }
         #endregion
 
@@ -243,7 +243,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(type));
             }
 
-            var root = BpmNetCoreHelpers.FindGenericBaseType(type, typeof(BpmNetDefinitionService<>));
+            var root = BpmNetCoreHelpers.FindGenericBaseType(type, typeof(BpmNetDefinitionService<,>));
             if (root == null)
             {
                 throw new ArgumentException("The specified type is invalid.", nameof(type));
@@ -259,16 +259,16 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
 
                 Services.Replace(new ServiceDescriptor(type, type, lifetime));
-                Services.Replace(new ServiceDescriptor(typeof(BpmNetDefinitionService<>), type, lifetime));
+                Services.Replace(new ServiceDescriptor(typeof(BpmNetDefinitionService<,>), type, lifetime));
             }
             else
             {
                 object ResolveService(IServiceProvider provider)
-                    => provider.GetRequiredService(typeof(BpmNetDefinitionService<>)
+                    => provider.GetRequiredService(typeof(BpmNetDefinitionService<,>)
                         .MakeGenericType(root.GenericTypeArguments[0]));
 
                 Services.Replace(new ServiceDescriptor(type, ResolveService, lifetime));
-                Services.Replace(new ServiceDescriptor(typeof(BpmNetDefinitionService<>)
+                Services.Replace(new ServiceDescriptor(typeof(BpmNetDefinitionService<,>)
                     .MakeGenericType(root.GenericTypeArguments[0]), type, lifetime));
             }
 

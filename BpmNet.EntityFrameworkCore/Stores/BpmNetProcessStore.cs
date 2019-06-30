@@ -1,11 +1,15 @@
-﻿using BpmNet.Model;
+﻿using BpmNet.Bpmn;
+using BpmNet.EntityFrameworkCore.Models;
+using BpmNet.Model;
 using BpmNet.Stores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -74,6 +78,103 @@ namespace BpmNet.EntityFrameworkCore.Stores
         public Task<TProcess[]> GetLatestProcessAsync(DateTime lastCheck, CancellationToken cancellationToken)
         {
             return GetLatestDefinitionCompiled(Context, lastCheck).ToArrayAsync(cancellationToken);
+        }
+
+        public Task<TProcess> GetProcessAsync(string processId, CancellationToken cancellationToken)
+        {
+            return _cache.GetOrCreateAsync(string.Concat(ProcessPrefix, processId), def =>
+            {
+                return FindByIdAsync(processId, cancellationToken);
+            });
+        }
+
+        public Task SaveProcessAsync(TProcess process, bool replace, CancellationToken cancellationToken)
+        {
+            if (process == null)
+            {
+                throw new ArgumentNullException(nameof(process));
+            }
+
+            if (process.Id == null)
+            {
+                throw new ArgumentNullException(nameof(process.Id));
+            }
+
+            return IsExistsAsync(t => t.Id == process.Id, cancellationToken).ContinueWith((exist) =>
+            {
+                process.TimeStamp = DateTime.UtcNow;
+                if (exist.Result)
+                {
+                    if (!replace)
+                    {
+                        throw new InvalidOperationException("ProcessId \"{0}\" already exists.");
+                    }
+                    return UpdateAsync(process, cancellationToken);
+                }
+                else
+                {
+                    return CreateAsync(process, cancellationToken);
+                }
+            }, cancellationToken);
+        }
+
+        private static readonly Func<TContext, string, AsyncEnumerable<TProcess>> GetIdByDefinition =
+            EF.CompileAsyncQuery((TContext context, string definitionId) =>
+            context.Set<TProcess>().AsNoTracking().Where(t => t.DefinitionId.Equals(definitionId)).Select(t => t));
+
+        public Task DeleteByDefinitionAsync(string definitionId, CancellationToken cancellationToken)
+        {
+            return GetIdByDefinition(Context, definitionId).ForEachAsync((process) =>
+            {
+                DeleteAsync(process);
+            }, cancellationToken);
+        }
+
+        public Task SaveProcessAsync(BpmnDefinitions bpmn, bool replace, CancellationToken cancellationToken)
+        {
+            return IsExistsAsync(t => t.DefinitionId == bpmn.Id, cancellationToken).ContinueWith((exist) =>
+            {
+                if (exist.Result)
+                {
+                    if (!replace)
+                    {
+                        throw new InvalidOperationException("Definition already exists.");
+                    }
+                    DeleteByDefinitionAsync(bpmn.Id, cancellationToken).ContinueWith((a) => SaveByDefinitionAsync(bpmn, cancellationToken), cancellationToken);
+                }
+                else
+                {
+                    SaveByDefinitionAsync(bpmn, cancellationToken);
+                }
+            }, cancellationToken);
+        }
+
+        private Task SaveByDefinitionAsync(BpmnDefinitions bpmn, CancellationToken cancellationToken)
+        {
+            foreach (var item in bpmn.Items.OfType<BpmnProcess>())
+            {
+                var process = new TProcess
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    DefinitionId = bpmn.Id,
+                    IsExecutable = item.IsExecutable,
+                    IsClosed = item.IsClosed
+                };
+                Context.Add(process);
+            }
+
+            try
+            {
+                return Context.SaveChangesAsync(cancellationToken);
+            }
+            catch (DbUpdateConcurrencyException exception)
+            {
+                throw new BpmNetException(BpmNetConstants.Exceptions.ConcurrencyError, new StringBuilder()
+                    .AppendLine("The application was concurrently updated and cannot be persisted in its current state.")
+                    .Append("Reload the application from the database and retry the operation.")
+                    .ToString(), exception);
+            }
         }
     }
 }

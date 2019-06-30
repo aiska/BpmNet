@@ -180,8 +180,6 @@ namespace BpmNet.EntityFrameworkCore.Tests
                 It.IsAny<BpmNetHistoryConfiguration<BpmNetHistory>>()), Times.Once());
             builder.Verify(mock => mock.ApplyConfiguration(
                 It.IsAny<BpmNetProcessConfiguration>()), Times.Once());
-            builder.Verify(mock => mock.ApplyConfiguration(
-                It.IsAny<BpmNetRootConfiguration>()), Times.Once());
         }
 
 
@@ -205,8 +203,6 @@ namespace BpmNet.EntityFrameworkCore.Tests
                 It.IsAny<BpmNetHistoryConfiguration<CustomHistory>>()), Times.Once());
             builder.Verify(mock => mock.ApplyConfiguration(
                 It.IsAny<BpmNetProcessConfiguration>()), Times.Once());
-            builder.Verify(mock => mock.ApplyConfiguration(
-                It.IsAny<BpmNetRootConfiguration>()), Times.Once());
         }
 
     }

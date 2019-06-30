@@ -12,6 +12,8 @@ namespace BpmNet.Core
         /// </summary>
         public Type DefaultDefinitionType { get; set; }
 
+        public Type DefaultProcessType { get; set; }
+
         public Type DefaultProcessInstanceType { get; set; }
 
         public Type DefaultProcessInstanceFlowType { get; set; }
